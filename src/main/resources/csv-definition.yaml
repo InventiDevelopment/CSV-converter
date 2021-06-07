@@ -1,0 +1,1448 @@
+version: 2.1
+tables:
+  transactions.csv:
+    name: Bonkopf
+    file-name: transactions.csv
+    fields:
+      Z_KASSE_ID:
+        type: String
+        name: Z_KASSE_ID
+        description: "ID der (Abschluss-) Kasse"
+        json-path: "cash_point_closing.head.company.location.cash_register.id"
+        length: 50
+      Z_ERSTELLUNG:
+        type: String
+        name: Z_ERSTELLUNG
+        description: "Zeitpunkt des Kassenabschlusses"
+        json-path: "cash_point_closing.head.creation_date"
+        length: 30
+      Z_NR:
+        type: Decimal
+        name: Z_NR
+        description: "Nr. des Kassenabschlusses"
+        json-path: "cash_point_closing.number"
+        decimal-places: 0
+      BON_ID:
+        type: String
+        name: BON_ID
+        description: "Vorgangs-ID"
+        json-path: "cash_point_closing.transactions[*].head.id"
+        length: 40
+      BON_NR:
+        type: Decimal
+        name: BON_NR
+        description: "Bonnummer"
+        json-path: "cash_point_closing.transactions[*].head.number"
+        decimal-places: 0
+      BON_TYP:
+        type: String
+        name: BON_TYP
+        description: "Bontyp"
+        json-path: "cash_point_closing.transactions[*].head.type"
+        length: 30
+      BON_NAME:
+        type: String
+        name: BON_NAME
+        description: "Zusatz-Beschreibung zum Bontyp"
+        json-path: "cash_point_closing.transactions[*].head.name"
+        length: 60
+      TERMINAL_ID:
+        type: String
+        name: TERMINAL_ID
+        description: "ID des Erfassungsterminals"
+        json-path: "cash_point_closing.transactions[*].head.closing_cash_register.slave_id"
+        length: 50
+      BON_STORNO:
+        type: Boolean
+        name: BON_STORNO
+        description: "Storno-Kennzeichen"
+        json-path: "cash_point_closing.transactions[*].head.storno"
+      BON_START:
+        type: String
+        name: BON_START
+        description: "Zeitpunkt des Vorgangsstarts"
+        json-path: "cash_point_closing.transactions[*].head.timestamp_start"
+        length: 30
+      BON_ENDE:
+        type: String
+        name: BON_ENDE
+        description: "Zeitpunkt der Vorgangsbeendigung"
+        json-path: "cash_point_closing.transactions[*].head.timestamp_end"
+        length: 30
+      BEDIENER_ID:
+        type: String
+        name: BEDIENER_ID
+        description: "Bediener-ID"
+        json-path: "cash_point_closing.transactions[*].head.user.id"
+        length: 50
+      BEDIENER_NAME:
+        type: String
+        name: BEDIENER_NAME
+        description: "Bediener-Name"
+        json-path: "cash_point_closing.transactions[*].head.user.name"
+        length: 50
+      UMS_BRUTTO:
+        type: Decimal
+        name: UMS_BRUTTO
+        description: "Brutto-Gesamtumsatz"
+        json-path: "cash_point_closing.transactions[*].data.full_amount_incl_vat"
+        decimal-places: 2
+      KUNDE_NAME:
+        type: String
+        name: KUNDE_NAME
+        description: "Name des Leistungsempfängers"
+        json-path: "cash_point_closing.transactions[*].head.buyer.name"
+        length: 50
+      KUNDE_ID:
+        type: String
+        name: KUNDE_ID
+        description: "Kundennummer des Leistungsempfängers"
+        json-path: "cash_point_closing.transactions[*].head.buyer.id"
+        length: 50
+      KUNDE_TYP:
+        type: String
+        name: KUNDE_TYP
+        description: "Art des Leistungsempfängers (z. B. Mitarbeiter)"
+        json-path: "cash_point_closing.transactions[*].head.buyer.type"
+        length: 50
+      KUNDE_STRASSE:
+        type: String
+        name: KUNDE_STRASSE
+        description: "Straße und Hausnummer des Leistungsempfängers"
+        json-path: "cash_point_closing.transactions[*].head.buyer.address.street"
+        length: 60
+      KUNDE_PLZ:
+        type: String
+        name: KUNDE_PLZ
+        description: "PLZ des Leistungsempfängers"
+        json-path: "cash_point_closing.transactions[*].head.buyer.address.postal_code"
+        length: 10
+      KUNDE_ORT:
+        type: String
+        name: KUNDE_ORT
+        description: "Ort des Leistungsempfängers"
+        json-path: "cash_point_closing.transactions[*].head.buyer.address.city"
+        length: 62
+      KUNDE_LAND:
+        type: String
+        name: KUNDE_LAND
+        description: "Land des Leistungsempfängers"
+        json-path: "cash_point_closing.transactions[*].head.buyer.address.country_code"
+        length: 3
+      KUNDE_USTID:
+        type: String
+        name: KUNDE_USTID
+        description: "UStID des Leistungsempfängers"
+        json-path: "cash_point_closing.transactions[*].head.buyer.vat_id_number"
+        length: 15
+      BON_NOTIZ:
+        type: String
+        name: BON_NOTIZ
+        description: "Zusätzliche Informationen zum Bonkopf"
+        json-path: "cash_point_closing.transactions[*].data.notes"
+        length: 255
+
+  allocation_groups.csv:
+    name: Bonkopf_AbrKreis
+    file-name: allocation_groups.csv
+    fields:
+      Z_KASSE_ID:
+        type: String
+        name: Z_KASSE_ID
+        description: "ID der (Abschluss-) Kasse"
+        json-path: "cash_point_closing.head.company.location.cash_register.id"
+        length: 50
+      Z_ERSTELLUNG:
+        type: String
+        name: Z_ERSTELLUNG
+        description: "Zeitpunkt des Kassenabschlusses"
+        json-path: "cash_point_closing.head.creation_date"
+        length: 30
+      Z_NR:
+        type: Decimal
+        name: Z_NR
+        description: "Nr. des Kassenabschlusses"
+        json-path: "cash_point_closing.number"
+        decimal-places: 0
+      BON_ID:
+        type: String
+        name: BON_ID
+        description: "Vorgangs-ID"
+        json-path: "cash_point_closing.transactions[*].head.id"
+        length: 40
+      ABRECHNUNGSKREIS:
+        type: String
+        name: ABRECHNUNGSKREIS
+        description: "z. B. Tischnummer"
+        json-path: "cash_point_closing.transactions[*].head.allocation_groups[*]"
+        length: 50
+
+  transactions_vat.csv:
+    name: Bonkopf_USt
+    file-name: transactions_vat.csv
+    fields:
+      Z_KASSE_ID:
+        type: String
+        name: Z_KASSE_ID
+        description: "ID der (Abschluss-) Kasse"
+        json-path: "cash_point_closing.head.company.location.cash_register.id"
+        length: 50
+      Z_ERSTELLUNG:
+        type: String
+        name: Z_ERSTELLUNG
+        description: "Zeitpunkt des Kassenabschlusses"
+        json-path: "cash_point_closing.head.creation_date"
+        length: 30
+      Z_NR:
+        type: Decimal
+        name: Z_NR
+        description: "Nr. des Kassenabschlusses"
+        json-path: "cash_point_closing.number"
+        decimal-places: 0
+      BON_ID:
+        type: String
+        name: BON_ID
+        description: "Vorgangs-ID"
+        json-path: "cash_point_closing.transactions[*].head.id"
+        length: 40
+      UST_SCHLUESSEL:
+        type: Decimal
+        name: UST_SCHLUESSEL
+        description: "ID des USt-Satzes"
+        json-path: "cash_point_closing.transactions[*].data.amounts_per_vat_id[*].id"
+        decimal-places: 0
+      BON_BRUTTO:
+        type: Decimal
+        name: BON_BRUTTO
+        description: "Bruttoumsatz"
+        json-path: "cash_point_closing.transactions[*].data.amounts_per_vat_id[*].incl_vat"
+        decimal-places: 5
+      BON_NETTO:
+        type: Decimal
+        name: BON_NETTO
+        description: "Nettoumsatz"
+        json-path: "cash_point_closing.transactions[*].data.amounts_per_vat_id[*].excl_vat"
+        decimal-places: 5
+      BON_UST:
+        type: Decimal
+        name: BON_UST
+        description: "USt"
+        json-path: "cash_point_closing.transactions[*].data.amounts_per_vat_id[*].vat"
+        decimal-places: 5
+
+  datapayment.csv:
+    name: Bonkopf_Zahlarten
+    file-name: datapayment.csv
+    fields:
+      Z_KASSE_ID:
+        type: String
+        name: Z_KASSE_ID
+        description: "ID der (Abschluss-) Kasse"
+        json-path: "cash_point_closing.head.company.location.cash_register.id"
+        length: 50
+      Z_ERSTELLUNG:
+        type: String
+        name: Z_ERSTELLUNG
+        description: "Zeitpunkt des Kassenabschlusses"
+        json-path: "cash_point_closing.head.creation_date"
+        length: 30
+      Z_NR:
+        type: Decimal
+        name: Z_NR
+        description: "Nr. des Kassenabschlusses"
+        json-path: "cash_point_closing.number"
+        decimal-places: 0
+      BON_ID:
+        type: String
+        name: BON_ID
+        description: "Vorgangs-ID"
+        json-path: "cash_point_closing.transactions[*].head.id"
+        length: 40
+      ZAHLART_TYP:
+        type: String
+        name: ZAHLART_TYP
+        description: "Typ der Zahlart"
+        json-path: "cash_point_closing.transactions[*].data.payment_types[*].type"
+        length: 25
+      ZAHLART_NAME:
+        type: String
+        name: ZAHLART_NAME
+        description: "Name der Zahlart"
+        json-path: "cash_point_closing.transactions[*].data.payment_types[*].name"
+        length: 60
+      ZAHLWAEH_CODE:
+        type: String
+        name: ZAHLWAEH_CODE
+        description: "Währungscode"
+        json-path: "cash_point_closing.transactions[*].data.payment_types[*].currency_code"
+        length: 3
+      ZAHLWAEH_BETRAG:
+        type: Decimal
+        name: ZAHLWAEH_BETRAG
+        description: "Betrag in Fremdwährung"
+        json-path: "cash_point_closing.transactions[*].data.payment_types[*].foreign_amount"
+        decimal-places: 2
+      BASISWAEH_BETRAG:
+        type: Decimal
+        name: BASISWAEH_BETRAG
+        description: "Betrag in Basiswährung (i.d.R. EUR)"
+        json-path: "cash_point_closing.transactions[*].data.payment_types[*].amount"
+        decimal-places: 2
+
+  lines.csv:
+    name: Bonpos
+    file-name: lines.csv
+    fields:
+      Z_KASSE_ID:
+        type: String
+        name: Z_KASSE_ID
+        description: "ID der (Abschluss-) Kasse"
+        json-path: "cash_point_closing.head.company.location.cash_register.id"
+        length: 50
+      Z_ERSTELLUNG:
+        type: String
+        name: Z_ERSTELLUNG
+        description: "Zeitpunkt des Kassenabschlusses"
+        json-path: "cash_point_closing.head.creation_date"
+        length: 30
+      Z_NR:
+        type: Decimal
+        name: Z_NR
+        description: "Nr. des Kassenabschlusses"
+        json-path: "cash_point_closing.number"
+        decimal-places: 0
+      BON_ID:
+        type: String
+        name: BON_ID
+        description: "Vorgangs-ID"
+        json-path: "cash_point_closing.transactions[*].head.id"
+        length: 40
+      POS_ZEILE:
+        type: String
+        name: POS_ZEILE
+        description: "Zeilennummer"
+        json-path: "cash_point_closing.transactions[*].data.lines[*].id"
+        length: 50
+      GUTSCHEIN_NR:
+        type: String
+        name: GUTSCHEIN_NR
+        description: "Gutschein-Nr."
+        json-path: "cash_point_closing.transactions[*].data.lines[*].voucher_id"
+        length: 50
+      ARTIKELTEXT:
+        type: String
+        name: ARTIKELTEXT
+        description: "Artikeltext"
+        json-path: "cash_point_closing.transactions[*].data.lines[*].text"
+        length: 255
+      POS_TERMINAL_ID:
+        type: String
+        name: POS_TERMINAL_ID
+        description: "ID des Positions-Terminals"
+        json-path: "cash_point_closing.transactions[*].data.lines[*].source_cash_register.slave_id"
+        length: 50
+      GV_TYP:
+        type: String
+        name: GV_TYP
+        description: "Geschäftsvorfall-Art"
+        json-path: "cash_point_closing.transactions[*].data.lines[*].business_case.type"
+        length: 30
+      GV_NAME:
+        type: String
+        name: GV_NAME
+        description: "Zusatz zu der Geschäftsvorfall-Art "
+        json-path: "cash_point_closing.transactions[*].data.lines[*].business_case.name"
+        length: 40
+      INHAUS:
+        type: Boolean
+        name: INHAUS
+        description: "Verzehr an Ort und Stelle"
+        json-path: "cash_point_closing.transactions[*].data.lines[*].in_house"
+      P_STORNO:
+        type: Boolean
+        name: P_STORNO
+        description: "Positionsstorno-Kennzeichnung"
+        json-path: "cash_point_closing.transactions[*].data.lines[*].storno"
+      AGENTUR_ID:
+        type: Decimal
+        name: AGENTUR_ID
+        description: "ID der Agentur"
+        json-path: "cash_point_closing.transactions[*].data.lines[*].business_case.purchaser_agency_id"
+        decimal-places: 0
+      ART_NR:
+        type: String
+        name: ART_NR
+        description: "Artikelnummer"
+        json-path: "cash_point_closing.transactions[*].data.lines[*].item.number"
+        length: 50
+      GTIN:
+        type: String
+        name: GTIN
+        description: "GTIN"
+        json-path: "cash_point_closing.transactions[*].data.lines[*].item.gtin"
+        length: 50
+      WARENGR_ID:
+        type: String
+        name: WARENGR_ID
+        description: "Warengruppen-ID"
+        json-path: "cash_point_closing.transactions[*].data.lines[*].item.group_id"
+        length: 40
+      WARENGR:
+        type: String
+        name: WARENGR
+        description: "Bezeichnung Warengruppe"
+        json-path: "cash_point_closing.transactions[*].data.lines[*].item.group_name"
+        length: 50
+      MENGE:
+        type: Decimal
+        name: MENGE
+        description: "Menge"
+        json-path: "cash_point_closing.transactions[*].data.lines[*].item.quantity"
+        decimal-places: 3
+      FAKTOR:
+        type: Decimal
+        name: FAKTOR
+        description: "Faktor, z. B. Gebindegrößen"
+        json-path: "cash_point_closing.transactions[*].data.lines[*].item.quantity_factor"
+        decimal-places: 3
+      EINHEIT:
+        type: String
+        name: EINHEIT
+        description: "Maßeinheit, z. B. kg, Liter oder Stück"
+        json-path: "cash_point_closing.transactions[*].data.lines[*].item.quantity_measure"
+        length: 50
+      STK_BR:
+        type: Decimal
+        name: STK_BR
+        description: "Preis pro Einheit inkl. USt"
+        json-path: "cash_point_closing.transactions[*].data.lines[*].item.price_per_unit"
+        decimal-places: 5
+
+  itemamounts.csv:
+    name: Bonpos_Preisfindung
+    file-name: itemamounts.csv
+    fields:
+      Z_KASSE_ID:
+        type: String
+        name: Z_KASSE_ID
+        description: "ID der (Abschluss-) Kasse"
+        json-path: "cash_point_closing.head.company.location.cash_register.id"
+        length: 50
+      Z_ERSTELLUNG:
+        type: String
+        name: Z_ERSTELLUNG
+        description: "Zeitpunkt des Kassenabschlusses"
+        json-path: "cash_point_closing.head.creation_date"
+        length: 30
+      Z_NR:
+        type: Decimal
+        name: Z_NR
+        description: "Nr. des Kassenabschlusses"
+        json-path: "cash_point_closing.number"
+        decimal-places: 0
+      BON_ID:
+        type: String
+        name: BON_ID
+        description: "Vorgangs-ID"
+        json-path: "cash_point_closing.transactions[*].head.id"
+        length: 40
+      POS_ZEILE:
+        type: String
+        name: POS_ZEILE
+        description: "Zeilennummer"
+        json-path: "cash_point_closing.transactions[*].data.lines[*].id"
+        length: 50
+      TYP:
+        type: String
+        name: TYP
+        description: "Basispreis, Rabatt oder Zuschlag"
+        json-path: "EMPTY_JSON_PATH" # the value should be replaced in implementation
+        length: 20
+      UST_SCHLUESSEL:
+        type: Decimal
+        name: UST_SCHLUESSEL
+        description: "ID des USt-Satzes"
+        json-path: "cash_point_closing.transactions[*].data.lines[*].item.base_amounts_per_vat_id[*].id"
+        decimal-places: 0
+        extended-json-paths:
+          - "cash_point_closing.transactions[*].data.lines[*].item.base_amounts_per_vat_id[*].id"
+          - "cash_point_closing.transactions[*].data.lines[*].item.discounts_per_vat_id[*].id"
+          - "cash_point_closing.transactions[*].data.lines[*].item.extra_amounts_per_vat_id[*].id"
+      PF_BRUTTO:
+        type: Decimal
+        name: PF_BRUTTO
+        description: "Bruttoumsatz"
+        json-path: "cash_point_closing.transactions[*].data.lines[*].item.base_amounts_per_vat_id[*].incl_vat"
+        decimal-places: 5
+        extended-json-paths:
+          - "cash_point_closing.transactions[*].data.lines[*].item.base_amounts_per_vat_id[*].incl_vat"
+          - "cash_point_closing.transactions[*].data.lines[*].item.discounts_per_vat_id[*].incl_vat"
+          - "cash_point_closing.transactions[*].data.lines[*].item.extra_amounts_per_vat_id[*].incl_vat"
+      PF_NETTO:
+        type: Decimal
+        name: PF_NETTO
+        description: "Nettoumsatz"
+        json-path: "cash_point_closing.transactions[*].data.lines[*].item.base_amounts_per_vat_id[*].excl_vat"
+        decimal-places: 5
+        extended-json-paths:
+          - "cash_point_closing.transactions[*].data.lines[*].item.base_amounts_per_vat_id[*].excl_vat"
+          - "cash_point_closing.transactions[*].data.lines[*].item.discounts_per_vat_id[*].excl_vat"
+          - "cash_point_closing.transactions[*].data.lines[*].item.extra_amounts_per_vat_id[*].excl_vat"
+      PF_UST:
+        type: Decimal
+        name: PF_UST
+        description: "USt"
+        json-path: "cash_point_closing.transactions[*].data.lines[*].item.base_amounts_per_vat_id[*].vat"
+        decimal-places: 5
+        extended-json-paths:
+          - "cash_point_closing.transactions[*].data.lines[*].item.base_amounts_per_vat_id[*].vat"
+          - "cash_point_closing.transactions[*].data.lines[*].item.discounts_per_vat_id[*].vat"
+          - "cash_point_closing.transactions[*].data.lines[*].item.extra_amounts_per_vat_id[*].vat"
+
+  lines_vat.csv:
+    name: Bonpos_USt
+    file-name: lines_vat.csv
+    fields:
+      Z_KASSE_ID:
+        type: String
+        name: Z_KASSE_ID
+        description: "ID der (Abschluss-) Kasse"
+        json-path: "cash_point_closing.head.company.location.cash_register.id"
+        length: 50
+      Z_ERSTELLUNG:
+        type: String
+        name: Z_ERSTELLUNG
+        description: "Zeitpunkt des Kassenabschlusses"
+        json-path: "cash_point_closing.head.creation_date"
+        length: 30
+      Z_NR:
+        type: Decimal
+        name: Z_NR
+        description: "Nr. des Kassenabschlusses"
+        json-path: "cash_point_closing.number"
+        decimal-places: 0
+      BON_ID:
+        type: String
+        name: BON_ID
+        description: "Vorgangs-ID"
+        json-path: "cash_point_closing.transactions[*].head.id"
+        length: 40
+      POS_ZEILE:
+        type: String
+        name: POS_ZEILE
+        description: "Zeilennummer"
+        json-path: "cash_point_closing.transactions[*].data.lines[*].id"
+        length: 50
+      UST_SCHLUESSEL:
+        type: Decimal
+        name: UST_SCHLUESSEL
+        description: "ID des USt-Satzes"
+        json-path: "cash_point_closing.transactions[*].data.lines[*].business_case.amounts_per_vat_id[*].id"
+        decimal-places: 0
+      POS_BRUTTO:
+        type: Decimal
+        name: POS_BRUTTO
+        description: "Bruttoumsatz"
+        json-path: "cash_point_closing.transactions[*].data.lines[*].business_case.amounts_per_vat_id[*].incl_vat"
+        decimal-places: 5
+      POS_NETTO:
+        type: Decimal
+        name: POS_NETTO
+        description: "Nettoumsatz"
+        json-path: "cash_point_closing.transactions[*].data.lines[*].business_case.amounts_per_vat_id[*].excl_vat"
+        decimal-places: 5
+      POS_UST:
+        type: Decimal
+        name: POS_UST
+        description: "USt"
+        json-path: "cash_point_closing.transactions[*].data.lines[*].business_case.amounts_per_vat_id[*].vat"
+        decimal-places: 5
+
+  subitems.csv:
+    name: Bonpos_Zusatzinfo
+    file-name: subitems.csv
+    fields:
+      Z_KASSE_ID:
+        type: String
+        name: Z_KASSE_ID
+        description: "ID der (Abschluss-) Kasse"
+        json-path: "cash_point_closing.head.company.location.cash_register.id"
+        length: 50
+      Z_ERSTELLUNG:
+        type: String
+        name: Z_ERSTELLUNG
+        description: "Zeitpunkt des Kassenabschlusses"
+        json-path: "cash_point_closing.head.creation_date"
+        length: 30
+      Z_NR:
+        type: Decimal
+        name: Z_NR
+        description: "Nr. des Kassenabschlusses"
+        json-path: "cash_point_closing.number"
+        decimal-places: 0
+      BON_ID:
+        type: String
+        name: BON_ID
+        description: "Vorgangs-ID"
+        json-path: "cash_point_closing.transactions[*].head.id"
+        length: 40
+      POS_ZEILE:
+        type: String
+        name: POS_ZEILE
+        description: "Zeilennummer"
+        json-path: "cash_point_closing.transactions[*].data.lines[*].id"
+        length: 50
+      ZI_ART_NR:
+        type: String
+        name: ZI_ART_NR
+        description: "Artikelnummer"
+        json-path: "cash_point_closing.transactions[*].data.lines[*].item.sub_items[*].number"
+        length: 50
+      ZI_GTIN:
+        type: String
+        name: ZI_GTIN
+        description: "GTIN"
+        json-path: "cash_point_closing.transactions[*].data.lines[*].item.sub_items[*].gtin"
+        length: 50
+      ZI_NAME:
+        type: String
+        name: ZI_NAME
+        description: "Artikelbezeichnung"
+        json-path: "cash_point_closing.transactions[*].data.lines[*].item.sub_items[*].name"
+        length: 60
+      ZI_WARENGR_ID:
+        type: String
+        name: ZI_WARENGR_ID
+        description: "Warengruppen-ID"
+        json-path: "cash_point_closing.transactions[*].data.lines[*].item.sub_items[*].group_id"
+        length: 40
+      ZI_WARENGR:
+        type: String
+        name: ZI_WARENGR
+        description: "Bezeichnung Warengruppe"
+        json-path: "cash_point_closing.transactions[*].data.lines[*].item.sub_items[*].group_name"
+        length: 50
+      ZI_MENGE:
+        type: Decimal
+        name: ZI_MENGE
+        description: "Menge"
+        json-path: "cash_point_closing.transactions[*].data.lines[*].item.sub_items[*].quantity"
+        decimal-places: 3
+      ZI_FAKTOR:
+        type: Decimal
+        name: ZI_FAKTOR
+        description: "Faktor, z. B. Gebindegrößen"
+        json-path: "cash_point_closing.transactions[*].data.lines[*].item.sub_items[*].quantity_factor"
+        decimal-places: 3
+      ZI_EINHEIT:
+        type: String
+        name: ZI_EINHEIT
+        description: "Maßeinheit, z. B. kg, Liter oder Stück"
+        json-path: "cash_point_closing.transactions[*].data.lines[*].item.sub_items[*].quantity_measure"
+        length: 50
+      ZI_UST_SCHLUESSEL:
+        type: Decimal
+        name: ZI_UST_SCHLUESSEL
+        description: "ID USt-Satz des Basispreises"
+        json-path: "cash_point_closing.transactions[*].data.lines[*].item.sub_items[*].amount_per_vat_id.id"
+        decimal-places: 0
+      ZI_BASISPREIS_BRUTTO:
+        type: Decimal
+        name: ZI_BASISPREIS_BRUTTO
+        description: "Basispreis brutto"
+        json-path: "cash_point_closing.transactions[*].data.lines[*].item.sub_items[*].amount_per_vat_id.incl_vat"
+        decimal-places: 5
+      ZI_BASISPREIS_NETTO:
+        type: Decimal
+        name: ZI_BASISPREIS_NETTO
+        description: "Basispreis netto"
+        json-path: "cash_point_closing.transactions[*].data.lines[*].item.sub_items[*].amount_per_vat_id.excl_vat"
+        decimal-places: 5
+      ZI_BASISPREIS_UST:
+        type: Decimal
+        name: ZI_BASISPREIS_UST
+        description: "Basispreis USt"
+        json-path: "cash_point_closing.transactions[*].data.lines[*].item.sub_items[*].amount_per_vat_id.vat"
+        decimal-places: 5
+
+  references.csv:
+    name: Bon_Referenzen
+    file-name: references.csv
+    fields:
+      Z_KASSE_ID:
+        type: String
+        name: Z_KASSE_ID
+        description: "ID der (Abschluss-) Kasse"
+        json-path: "cash_point_closing.head.company.location.cash_register.id"
+        length: 50
+      Z_ERSTELLUNG:
+        type: String
+        name: Z_ERSTELLUNG
+        description: "Zeitpunkt des Kassenabschlusses"
+        json-path: "cash_point_closing.head.creation_date"
+        length: 30
+      Z_NR:
+        type: Decimal
+        name: Z_NR
+        description: "Nr. des Kassenabschlusses"
+        json-path: "cash_point_closing.number"
+        decimal-places: 0
+      BON_ID:
+        type: String
+        name: BON_ID
+        description: "Vorgangs-ID"
+        json-path: "cash_point_closing.transactions[*].head.id"
+        length: 40
+      POS_ZEILE:
+        type: String
+        name: POS_ZEILE
+        description: "Zeilennummer des referenzierenden Vorgangs (nicht bei Verweis aus einem Bonkopf heraus)"
+        json-path: "cash_point_closing.transactions[*].data.lines[*].id"
+        length: 50
+      REF_TYP:
+        type: String
+        name: REF_TYP
+        description: "Art der Referenz"
+        json-path: "cash_point_closing.transactions[*].data.lines[*].references[*].type"
+        required: true
+        length: 20
+      REF_NAME:
+        type: String
+        name: REF_NAME
+        description: "Beschreibung bei Art “ExterneSonstige”"
+        json-path: "cash_point_closing.transactions[*].data.lines[*].references[*].name"
+        length: 40
+      REF_DATUM:
+        type: String
+        name: REF_DATUM
+        description: "Datum des Kassenabschlusses"
+        json-path: "cash_point_closing.transactions[*].data.lines[*].references[*].date"
+        length: 30
+      REF_Z_KASSE_ID:
+        type: String
+        name: REF_Z_KASSE_ID
+        description: "ID der (Abschluss-) Kasse"
+        json-path: "cash_point_closing.transactions[*].data.lines[*].references[*].cash_register_id"
+        length: 50
+      REF_Z_NR:
+        type: Decimal
+        name: REF_Z_NR
+        description: "Nr. des Kassenabschlusses"
+        json-path: "cash_point_closing.transactions[*].data.lines[*].references[*].cash_point_closing"
+        decimal-places: 0
+      REF_BON_ID:
+        type: String
+        name: REF_BON_ID
+        description: "Vorgangs-ID"
+        json-path: "cash_point_closing.transactions[*].data.lines[*].references[*].id"
+        length: 40
+
+  cashpointclosing.csv:
+    name: Stamm_Abschluss
+    file-name: cashpointclosing.csv
+    fields:
+      Z_KASSE_ID:
+        type: String
+        name: Z_KASSE_ID
+        description: "ID der (Abschluss-) Kasse"
+        json-path: "cash_point_closing.head.company.location.cash_register.id"
+        length: 50
+      Z_ERSTELLUNG:
+        type: String
+        name: Z_ERSTELLUNG
+        description: "Zeitpunkt des Kassenabschlusses"
+        json-path: "cash_point_closing.head.creation_date"
+        length: 30
+      Z_NR:
+        type: Decimal
+        name: Z_NR
+        description: "Nr. des Kassenabschlusses"
+        json-path: "cash_point_closing.number"
+        decimal-places: 0
+      Z_BUCHUNGSTAG:
+        type: String
+        name: Z_BUCHUNGSTAG
+        description: "Vom Erstellungsdatum abweichender Verbuchungstag"
+        json-path: "cash_point_closing.head.business_date"
+        length: 25
+      TAXONOMIE_VERSION:
+        type: String
+        name: TAXONOMIE_VERSION
+        description: "Version der DFKA-Taxonomie-Kasse"
+        json-path: "cash_point_closing.taxonomy_version"
+        length: 10
+      Z_START_ID:
+        type: String
+        name: Z_START_ID
+        description: "Erste BON_ID im Abschluss"
+        json-path: "cash_point_closing.head.first_id"
+        length: 40
+      Z_ENDE_ID:
+        type: String
+        name: Z_ENDE_ID
+        description: "Letzte BON_ID im Abschluss"
+        json-path: "cash_point_closing.head.last_id"
+        length: 40
+      NAME:
+        type: String
+        name: NAME
+        description: "Name des Unternehmens"
+        json-path: "cash_point_closing.head.company.name"
+        length: 60
+      STRASSE:
+        type: String
+        name: STRASSE
+        description: "Straße"
+        json-path: "cash_point_closing.head.company.address.street"
+        length: 60
+      PLZ:
+        type: String
+        name: PLZ
+        description: "Postleitzahl"
+        json-path: "cash_point_closing.head.company.address.postal_code"
+        length: 10
+      ORT:
+        type: String
+        name: ORT
+        description: "Ort"
+        json-path: "cash_point_closing.head.company.address.city"
+        length: 62
+      LAND:
+        type: String
+        name: LAND
+        description: "Land"
+        json-path: "cash_point_closing.head.company.address.country_code"
+        length: 3
+      STNR:
+        type: String
+        name: STNR
+        description: "Steuernummer des Unternehmens"
+        json-path: "cash_point_closing.head.company.tax_number"
+        length: 20
+      USTID:
+        type: String
+        name: USTID
+        description: "USTID"
+        json-path: "cash_point_closing.head.company.vat_id_number"
+        length: 15
+      Z_SE_ZAHLUNGEN:
+        type: Decimal
+        name: Z_SE_ZAHLUNGEN
+        description: "Summe aller Zahlungen"
+        json-path: "cash_point_closing.cash_statement.payment.full_amount"
+        decimal-places: 2
+      Z_SE_BARZAHLUNGEN:
+        type: Decimal
+        name: Z_SE_BARZAHLUNGEN
+        description: "Summe aller Barzahlungen"
+        json-path: "cash_point_closing.cash_statement.payment.cash_amount"
+        decimal-places: 2
+
+  pa.csv:
+    name: Stamm_Agenturen
+    file-name: pa.csv
+    fields:
+      Z_KASSE_ID:
+        type: String
+        name: Z_KASSE_ID
+        description: "ID der (Abschluss-) Kasse"
+        json-path: "cash_point_closing.head.company.location.cash_register.id"
+        length: 50
+      Z_ERSTELLUNG:
+        type: String
+        name: Z_ERSTELLUNG
+        description: "Zeitpunkt des Kassenabschlusses"
+        json-path: "cash_point_closing.head.creation_date"
+        length: 30
+      Z_NR:
+        type: Decimal
+        name: Z_NR
+        description: "Nr. des Kassenabschlusses"
+        json-path: "cash_point_closing.number"
+        decimal-places: 0
+      AGENTUR_ID:
+        type: Decimal
+        name: AGENTUR_ID
+        description: "ID der Agentur"
+        json-path: "cash_point_closing.head.company.location.cash_register.purchaser_agencies[*].id"
+        decimal-places: 0
+      AGENTUR_NAME:
+        type: String
+        name: AGENTUR_NAME
+        description: "Name des Auftraggebers"
+        json-path: "cash_point_closing.head.company.location.cash_register.purchaser_agencies[*].name"
+        length: 60
+      AGENTUR_STRASSE:
+        type: String
+        name: AGENTUR_STRASSE
+        description: "Straße"
+        json-path: "cash_point_closing.head.company.location.cash_register.purchaser_agencies[*].address.street"
+        length: 60
+      AGENTUR_PLZ:
+        type: String
+        name: AGENTUR_PLZ
+        description: "Postleitzahl"
+        json-path: "cash_point_closing.head.company.location.cash_register.purchaser_agencies[*].address.postal_code"
+        length: 10
+      AGENTUR_ORT:
+        type: String
+        name: AGENTUR_ORT
+        description: "Ort"
+        json-path: "cash_point_closing.head.company.location.cash_register.purchaser_agencies[*].address.city"
+        length: 62
+      AGENTUR_LAND:
+        type: String
+        name: AGENTUR_LAND
+        description: "Land"
+        json-path: "cash_point_closing.head.company.location.cash_register.purchaser_agencies[*].address.country_code"
+        length: 3
+      AGENTUR_STNR:
+        type: String
+        name: AGENTUR_STNR
+        description: "Steuernummer des Auftraggebers"
+        json-path: "cash_point_closing.head.company.location.cash_register.purchaser_agencies[*].tax_number"
+        length: 20
+      AGENTUR_USTID:
+        type: String
+        name: AGENTUR_USTID
+        description: "USTID des Auftraggebers"
+        json-path: "cash_point_closing.head.company.location.cash_register.purchaser_agencies[*].vat_id_number"
+        length: 15
+
+  cashregister.csv:
+    name: Stamm_Kassen
+    file-name: cashregister.csv
+    fields:
+      Z_KASSE_ID:
+        type: String
+        name: Z_KASSE_ID
+        description: "ID der (Abschluss-) Kasse"
+        json-path: "cash_point_closing.head.company.location.cash_register.id"
+        length: 50
+      Z_ERSTELLUNG:
+        type: String
+        name: Z_ERSTELLUNG
+        description: "Zeitpunkt des Kassenabschlusses"
+        json-path: "cash_point_closing.head.creation_date"
+        length: 30
+      Z_NR:
+        type: Decimal
+        name: Z_NR
+        description: "Nr. des Kassenabschlusses"
+        json-path: "cash_point_closing.number"
+        decimal-places: 0
+      KASSE_BRAND:
+        type: String
+        name: KASSE_BRAND
+        description: "Marke der Kasse"
+        json-path: "cash_point_closing.head.company.location.cash_register.brand"
+        length: 50
+      KASSE_MODELL:
+        type: String
+        name: KASSE_MODELL
+        description: "Modellbezeichnung"
+        json-path: "cash_point_closing.head.company.location.cash_register.model"
+        length: 50
+      KASSE_SERIENNR:
+        type: String
+        name: KASSE_SERIENNR
+        description: "Seriennummer der Kasse"
+        json-path: "cash_point_closing.head.company.location.cash_register.serial_number"
+        length: 70
+      KASSE_SW_BRAND:
+        type: String
+        name: KASSE_SW_BRAND
+        description: "Markenbezeichnung der Software"
+        json-path: "cash_point_closing.head.company.location.cash_register.software.brand"
+        length: 50
+      KASSE_SW_VERSION:
+        type: String
+        name: KASSE_SW_VERSION
+        description: "Version der Software"
+        json-path: "cash_point_closing.head.company.location.cash_register.software.version"
+        length: 50
+      KASSE_BASISWAEH_CODE:
+        type: String
+        name: KASSE_BASISWAEH_CODE
+        description: "Basiswährung der Kasse"
+        json-path: "cash_point_closing.head.company.location.cash_register.base_currency_code"
+        length: 3
+      KEINE_UST_ZUORDNUNG:
+        type: Boolean
+        name: KEINE_UST_ZUORDNUNG
+        description: "UmsatzsteuerNichtErmittelbar"
+        json-path: "cash_point_closing.head.company.location.cash_register.processing_flags.UmsatzsteuerNichtErmittelbar"
+
+  location.csv:
+    name: Stamm_Orte
+    file-name: location.csv
+    fields:
+      Z_KASSE_ID:
+        type: String
+        name: Z_KASSE_ID
+        description: "ID der (Abschluss-) Kasse"
+        json-path: "cash_point_closing.head.company.location.cash_register.id"
+        length: 50
+      Z_ERSTELLUNG:
+        type: String
+        name: Z_ERSTELLUNG
+        description: "Zeitpunkt des Kassenabschlusses"
+        json-path: "cash_point_closing.head.creation_date"
+        length: 30
+      Z_NR:
+        type: Decimal
+        name: Z_NR
+        description: "Nr. des Kassenabschlusses"
+        json-path: "cash_point_closing.number"
+        decimal-places: 0
+      LOC_NAME:
+        type: String
+        name: LOC_NAME
+        description: "Name des Standortes"
+        json-path: "cash_point_closing.head.company.location.name"
+        length: 60
+      LOC_STRASSE:
+        type: String
+        name: LOC_STRASSE
+        description: "Straße"
+        json-path: "cash_point_closing.head.company.location.address.street"
+        length: 60
+      LOC_PLZ:
+        type: String
+        name: LOC_PLZ
+        description: "Postleitzahl"
+        json-path: "cash_point_closing.head.company.location.address.postal_code"
+        length: 10
+      LOC_ORT:
+        type: String
+        name: LOC_ORT
+        description: "Ort"
+        json-path: "cash_point_closing.head.company.location.address.city"
+        length: 62
+      LOC_LAND:
+        type: String
+        name: LOC_LAND
+        description: "Land"
+        json-path: "cash_point_closing.head.company.location.address.country_code"
+        length: 3
+      LOC_USTID:
+        type: String
+        name: LOC_USTID
+        description: "USTID"
+        json-path: "cash_point_closing.head.company.location.vat_id_number"
+        length: 15
+
+  slaves.csv:
+    name: Stamm_Terminals
+    file-name: slaves.csv
+    fields:
+      Z_KASSE_ID:
+        type: String
+        name: Z_KASSE_ID
+        description: "ID der (Abschluss-) Kasse"
+        json-path: "cash_point_closing.head.company.location.cash_register.id"
+        length: 50
+      Z_ERSTELLUNG:
+        type: String
+        name: Z_ERSTELLUNG
+        description: "Zeitpunkt des Kassenabschlusses"
+        json-path: "cash_point_closing.head.creation_date"
+        length: 30
+      Z_NR:
+        type: Decimal
+        name: Z_NR
+        description: "Nr. des Kassenabschlusses"
+        json-path: "cash_point_closing.number"
+        decimal-places: 0
+      TERMINAL_ID:
+        type: String
+        name: TERMINAL_ID
+        description: "ID des Terminals"
+        json-path: "cash_point_closing.head.company.location.cash_register.slaves[*].slave_id"
+        length: 50
+      TERMINAL_BRAND:
+        type: String
+        name: TERMINAL_BRAND
+        description: "Marke der Terminals"
+        json-path: "cash_point_closing.head.company.location.cash_register.slaves[*].brand"
+        length: 50
+      TERMINAL_MODELL:
+        type: String
+        name: TERMINAL_MODELL
+        description: "Modellbezeichnung des Terminals"
+        json-path: "cash_point_closing.head.company.location.cash_register.slaves[*].model"
+        length: 50
+      TERMINAL_SERIENNR:
+        type: String
+        name: TERMINAL_SERIENNR
+        description: "Seriennummer des Terminals"
+        json-path: "cash_point_closing.head.company.location.cash_register.slaves[*].serial_number"
+        length: 70
+      TERMINAL_SW_BRAND:
+        type: String
+        name: TERMINAL_SW_BRAND
+        description: "Markenbezeichnung der Software"
+        json-path: "cash_point_closing.head.company.location.cash_register.slaves[*].software.brand"
+        length: 50
+      TERMINAL_SW_VERSION:
+        type: String
+        name: TERMINAL_SW_VERSION
+        description: "Version der Software"
+        json-path: "cash_point_closing.head.company.location.cash_register.slaves[*].software.version"
+        length: 50
+
+  tse.csv:
+    name: Stamm_TSE
+    file-name: tse.csv
+    fields:
+      Z_KASSE_ID:
+        type: String
+        name: Z_KASSE_ID
+        description: "ID der (Abschluss-) Kasse"
+        json-path: "cash_point_closing.head.company.location.cash_register.id"
+        length: 50
+      Z_ERSTELLUNG:
+        type: String
+        name: Z_ERSTELLUNG
+        description: "Zeitpunkt des Kassenabschlusses"
+        json-path: "cash_point_closing.head.creation_date"
+        length: 30
+      Z_NR:
+        type: Decimal
+        name: Z_NR
+        description: "Nr. des Kassenabschlusses"
+        json-path: "cash_point_closing.number"
+        decimal-places: 0
+      TSE_ID:
+        type: Decimal
+        name: TSE_ID
+        description: "ID der TSE - wird nur zur Referenzierung innerhalb eines Kassenabschlusses verwendet"
+        json-path: "cash_point_closing.security.tse.modules[*].id"
+        decimal-places: 0
+      TSE_SERIAL:
+        type: String
+        name: TSE_SERIAL
+        description: "Seriennummer der TSE (Entspricht laut TR-03153 Abschnitt 7.5. dem Hashwert des im Zertifikat enthaltenen Schlüssels; Octet-String in Hexadezimal-Darstellung)"
+        json-path: "cash_point_closing.security.tse.modules[*].serial_number"
+        length: 68
+      TSE_SIG_ALGO:
+        type: String
+        name: TSE_SIG_ALGO
+        description: "Der von der TSE verwendete Signaturalgorithmus"
+        json-path: "cash_point_closing.security.tse.modules[*].signature_algorithm"
+        length: 21
+      TSE_ZEITFORMAT:
+        type: String
+        name: TSE_ZEITFORMAT
+        description: "Das von der TSE verwendete Format für die Log-Time - ‚unixTime‘, 'utcTime' = YYMMDDhhmmZ, 'utcTimeWithSeconds' = YYMMDDhhmmssZ, 'generalizedTime' = YYYYMMDDhhmmssZ, 'generalizedTimeWithMilliseconds' = YYYYMMDDhhmmss.fffZ"
+        json-path: "cash_point_closing.security.tse.modules[*].log_time_format"
+        length: 31
+      TSE_PD_ENCODING:
+        type: String
+        name: TSE_PD_ENCODING
+        description: "Text-Encoding der ProcessData (UTF-8 oder ASCII)"
+        json-path: "EMPTY_JSON_PATH"
+        length: 5
+        extended-json-paths:
+          - "cash_point_closing.security.tse.process_data_encoding"
+      TSE_PUBLIC_KEY:
+        type: String
+        name: TSE_PUBLIC_KEY
+        description: "Öffentlicher Schlüssel – ggf. extrahiert aus dem Zertifikat der TSE – in base64-Codierung"
+        json-path: "cash_point_closing.security.tse.modules[*].certificate"
+        length: 512
+      TSE_ZERTIFIKAT_I:
+        type: String
+        name: TSE_ZERTIFIKAT_I
+        description: "Erste 1000 Zeichen des base64-codierten Zertifikats der TSE (in base64-Codierung)"
+        json-path: "cash_point_closing.security.tse.modules[*].certificate"
+        length: 1000
+      TSE_ZERTIFIKAT_II:
+        type: String
+        name: TSE_ZERTIFIKAT_II
+        description: "Zeichen 1001-2000 des base64-codierten Zertifikats der TSE (in base64-Codierung)"
+        json-path: "cash_point_closing.security.tse.modules[*].certificate"
+        length: 1000
+      TSE_ZERTIFIKAT_III:
+        type: String
+        name: TSE_ZERTIFIKAT_III
+        description: "Zeichen 2001-3000 des base64-codierten Zertifikats der TSE (in base64-Codierung)"
+        json-path: "cash_point_closing.security.tse.modules[*].certificate"
+        length: 1000
+      TSE_ZERTIFIKAT_IV:
+        type: String
+        name: TSE_ZERTIFIKAT_IV
+        description: "Zeichen 3001-4000 des base64-codierten Zertifikats der TSE (in base64-Codierung)"
+        json-path: "cash_point_closing.security.tse.modules[*].certificate"
+        length: 1000
+      TSE_ZERTIFIKAT_V:
+        type: String
+        name: TSE_ZERTIFIKAT_V
+        description: "Ggf. Rest des base64-codierten Zertifikats der TSE (in base64-Codierung)"
+        json-path: "cash_point_closing.security.tse.modules[*].certificate"
+        length: 1000
+
+  vat.csv:
+    name: Stamm_USt
+    file-name: vat.csv
+    fields:
+      Z_KASSE_ID:
+        type: String
+        name: Z_KASSE_ID
+        description: "ID der (Abschluss-) Kasse"
+        json-path: "cash_point_closing.head.company.location.cash_register.id"
+        length: 50
+      Z_ERSTELLUNG:
+        type: String
+        name: Z_ERSTELLUNG
+        description: "Zeitpunkt des Kassenabschlusses"
+        json-path: "cash_point_closing.head.creation_date"
+        length: 30
+      Z_NR:
+        type: Decimal
+        name: Z_NR
+        description: "Nr. des Kassenabschlusses"
+        json-path: "cash_point_closing.number"
+        decimal-places: 0
+      UST_SCHLUESSEL:
+        type: Decimal
+        name: UST_SCHLUESSEL
+        description: "ID des Umsatzsteuersatzes"
+        json-path: "cash_point_closing.head.company.location.cash_register.vat_definitions[*].id"
+        decimal-places: 0
+      UST_SATZ:
+        type: Decimal
+        name: UST_SATZ
+        description: "Prozentsatz"
+        json-path: "cash_point_closing.head.company.location.cash_register.vat_definitions[*].percentage"
+        decimal-places: 2
+      UST_BESCHR:
+        type: String
+        name: UST_BESCHR
+        description: "Beschreibung"
+        json-path: "cash_point_closing.head.company.location.cash_register.vat_definitions[*].description"
+        length: 55
+
+  transactions_tse.csv:
+    name: TSE_Transaktionen
+    file-name: transactions_tse.csv
+    fields:
+      Z_KASSE_ID:
+        type: String
+        name: Z_KASSE_ID
+        description: "ID der (Abschluss-) Kasse"
+        json-path: "cash_point_closing.head.company.location.cash_register.id"
+        length: 50
+      Z_ERSTELLUNG:
+        type: String
+        name: Z_ERSTELLUNG
+        description: "Zeitpunkt des Kassenabschlusses"
+        json-path: "cash_point_closing.head.creation_date"
+        length: 30
+      Z_NR:
+        type: Decimal
+        name: Z_NR
+        description: "Nr. des Kassenabschlusses"
+        json-path: "cash_point_closing.number"
+        decimal-places: 0
+      BON_ID:
+        type: String
+        name: BON_ID
+        description: "Vorgangs-ID"
+        json-path: "cash_point_closing.transactions[*].head.id"
+        length: 40
+      TSE_ID:
+        type: Decimal
+        name: TSE_ID
+        description: "ID der für die Transaktion verwendeten TSE"
+        json-path: "cash_point_closing.transactions[*].security.tse.module_id"
+        decimal-places: 0
+      TSE_TANR:
+        type: Decimal
+        name: TSE_TANR
+        description: "Transaktionsnummer der Transaktion"
+        json-path: "cash_point_closing.transactions[*].security.tse.transaction_number"
+        decimal-places: 0
+      TSE_TA_START:
+        type: String
+        name: TSE_TA_START
+        description: "Log-Time der StartTransaction-Operation"
+        json-path: "cash_point_closing.transactions[*].security.tse.start_transaction.log_time"
+        length: 30
+      TSE_TA_ENDE:
+        type: String
+        name: TSE_TA_ENDE
+        description: "Log-Time der FinishTransaction-Operation"
+        json-path: "cash_point_closing.transactions[*].security.tse.finish_transaction.log_time"
+        length: 30
+      TSE_TA_VORGANGSART:
+        type: String
+        name: TSE_TA_VORGANGSART
+        description: "processType der FinishTransaction-Operation"
+        json-path: "cash_point_closing.transactions[*].security.tse.finish_transaction.process_type"
+        length: 30
+      TSE_TA_SIGZ:
+        type: Decimal
+        name: TSE_TA_SIGZ
+        description: "Signaturzähler der FinishTransaction-Operation"
+        json-path: "cash_point_closing.transactions[*].security.tse.finish_transaction.signature_counter"
+        decimal-places: 0
+      TSE_TA_SIG:
+        type: String
+        name: TSE_TA_SIG
+        description: "Signatur der FinishTransaction-Operation"
+        json-path: "cash_point_closing.transactions[*].security.tse.finish_transaction.signature"
+        length: 512
+      TSE_TA_FEHLER:
+        type: String
+        name: TSE_TA_FEHLER
+        description: "Ggf. Hinweise auf Fehler der TSE"
+        json-path: "cash_point_closing.transactions[*].security.tse.error_description"
+        length: 200
+      TSE_VORGANGSDATEN:
+        type: String
+        name: TSE_VORGANGSDATEN
+        description: "Daten des Vorgangs (optional)"
+        json-path: "cash_point_closing.transactions[*].security.tse.finish_transaction.process_data"
+        length: 1000
+
+  businesscases.csv:
+    name: Z_GV_TYP
+    file-name: businesscases.csv
+    fields:
+      Z_KASSE_ID:
+        type: String
+        name: Z_KASSE_ID
+        description: "ID der (Abschluss-) Kasse"
+        json-path: "cash_point_closing.head.company.location.cash_register.id"
+        length: 50
+      Z_ERSTELLUNG:
+        type: String
+        name: Z_ERSTELLUNG
+        description: "Zeitpunkt des Kassenabschlusses"
+        json-path: "cash_point_closing.head.creation_date"
+        length: 30
+      Z_NR:
+        type: Decimal
+        name: Z_NR
+        description: "Nr. des Kassenabschlusses"
+        json-path: "cash_point_closing.number"
+        decimal-places: 0
+      GV_TYP:
+        type: String
+        name: GV_TYP
+        description: "Typ der Geschäftsvorfall-Art"
+        json-path: "cash_point_closing.cash_statement.business_cases[*].type"
+        length: 30
+      GV_NAME:
+        type: String
+        name: GV_NAME
+        description: "Name der Geschäftsvorfall-Art"
+        json-path: "cash_point_closing.cash_statement.business_cases[*].name"
+        length: 40
+      AGENTUR_ID:
+        type: Decimal
+        name: AGENTUR_ID
+        description: "ID der Agentur"
+        json-path: "cash_point_closing.cash_statement.business_cases[*].purchaser_agency_id"
+        decimal-places: 0
+      UST_SCHLUESSEL:
+        type: Decimal
+        name: UST_SCHLUESSEL
+        description: "ID des Umsatzsteuersatzes"
+        json-path: "cash_point_closing.cash_statement.business_cases[*].amounts_per_vat_id[*].id"
+        decimal-places: 0
+      Z_UMS_BRUTTO:
+        type: Decimal
+        name: Z_UMS_BRUTTO
+        description: "Bruttoumsatz"
+        json-path: "cash_point_closing.cash_statement.business_cases[*].amounts_per_vat_id[*].incl_vat"
+        decimal-places: 5
+      Z_UMS_NETTO:
+        type: Decimal
+        name: Z_UMS_NETTO
+        description: "Nettoumsatz"
+        json-path: "cash_point_closing.cash_statement.business_cases[*].amounts_per_vat_id[*].excl_vat"
+        decimal-places: 5
+      Z_UST:
+        type: Decimal
+        name: Z_UST
+        description: "USt"
+        json-path: "cash_point_closing.cash_statement.business_cases[*].amounts_per_vat_id[*].vat"
+        decimal-places: 5
+
+  cash_per_currency.csv:
+    name: Z_WAEHRUNGEN
+    file-name: cash_per_currency.csv
+    fields:
+      Z_KASSE_ID:
+        type: String
+        name: Z_KASSE_ID
+        description: "ID der (Abschluss-) Kasse"
+        json-path: "cash_point_closing.head.company.location.cash_register.id"
+        length: 50
+      Z_ERSTELLUNG:
+        type: String
+        name: Z_ERSTELLUNG
+        description: "Zeitpunkt des Kassenabschlusses"
+        json-path: "cash_point_closing.head.creation_date"
+        length: 30
+      Z_NR:
+        type: Decimal
+        name: Z_NR
+        description: "Nr. des Kassenabschlusses"
+        json-path: "cash_point_closing.number"
+        decimal-places: 0
+      ZAHLART_WAEH:
+        type: String
+        name: ZAHLART_WAEH
+        description: "Währung"
+        json-path: "cash_point_closing.cash_statement.payment.cash_amounts_by_currency[*].currency_code"
+        length: 3
+      ZAHLART_BETRAG_WAEH:
+        type: Decimal
+        name: ZAHLART_BETRAG_WAEH
+        description: "Betrag"
+        json-path: "cash_point_closing.cash_statement.payment.cash_amounts_by_currency[*].amount"
+        decimal-places: 2
+
+  payment.csv:
+    name: Z_Zahlart
+    file-name: payment.csv
+    fields:
+      Z_KASSE_ID:
+        type: String
+        name: Z_KASSE_ID
+        description: "ID der (Abschluss-) Kasse"
+        json-path: "cash_point_closing.head.company.location.cash_register.id"
+        length: 50
+      Z_ERSTELLUNG:
+        type: String
+        name: Z_ERSTELLUNG
+        description: "Zeitpunkt des Kassenabschlusses"
+        json-path: "cash_point_closing.head.creation_date"
+        length: 30
+      Z_NR:
+        type: Decimal
+        name: Z_NR
+        description: "Nr. des Kassenabschlusses"
+        json-path: "cash_point_closing.number"
+        decimal-places: 0
+      ZAHLART_TYP:
+        type: String
+        name: ZAHLART_TYP
+        description: "Typ der Zahlart"
+        json-path: "cash_point_closing.cash_statement.payment.payment_types[*].type"
+        length: 25
+      ZAHLART_NAME:
+        type: String
+        name: ZAHLART_NAME
+        description: "Name der Zahlart"
+        json-path: "cash_point_closing.cash_statement.payment.payment_types[*].name"
+        length: 60
+      Z_ZAHLART_BETRAG:
+        type: Decimal
+        name: Z_ZAHLART_BETRAG
+        description: "Betrag"
+        json-path: "cash_point_closing.cash_statement.payment.payment_types[*].amount"
+        decimal-places: 2
