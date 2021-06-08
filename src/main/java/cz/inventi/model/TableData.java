@@ -8,6 +8,10 @@ public interface TableData {
 
   String getFileName();
 
+  default String getEncoding() {
+    return "UTF8";
+  }
+
   default String getColumnDelimiter() {
     return ";";
   }

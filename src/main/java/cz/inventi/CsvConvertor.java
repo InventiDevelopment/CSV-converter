@@ -57,12 +57,9 @@ public class CsvConvertor {
     return jsonPaths;
   }
 
-  public void convert(String source, String target) throws IOException {
+  public void convert(String source, String target, TableData csvDefinition) throws IOException {
     DocumentContext jsonContext = parseJsonFile(source);
     ensureTargetExists(target);
-
-    TableData csvDefinition = createCsvDefinition();
-
     convertTableMetaData(csvDefinition, jsonContext, target);
   }
 
@@ -79,7 +76,7 @@ public class CsvConvertor {
     log.debug(String.format("Generating CSV file %s (%s).", tableMetaData.getName(), tableMetaData.getFileName()));
     generateFile(tableMetaData, head, jsonContext, target);
     log.info(String
-        .format("CSV file šs (šs) was successfully created.", tableMetaData.getName(), tableMetaData.getFileName()));
+        .format("CSV file %s (%s) was successfully created.", tableMetaData.getName(), tableMetaData.getFileName()));
   }
 
   /**
@@ -386,24 +383,6 @@ public class CsvConvertor {
     if (!directory.exists() && !directory.mkdirs()) {
       throw new IOException("The target directory doesn't exist and couldn't be created.");
     }
-  }
-
-  private TableData createCsvDefinition() {
-    List<Field> fields = List.of(
-        new CsvField("NAME", "name", false),
-        new CsvField("VERSION", "version", false),
-        new CsvField("DATE", "date", false),
-        new CsvField("OPTION", "options.name", false),
-        new CsvField("TENANT ID", "tenants[*].id", false),
-        new CsvField("TENANT NAME", "tenants[*].name", false),
-        new CsvField("ORGANIZATION ID", "tenants[*].organizations[*].id", false),
-        new CsvField("ORGANIZATION NAME", "tenants[*].organizations[*].name", false),
-        new CsvField("ORGANIZATION CREATED", "tenants[*].organizations[*].created", false),
-        new CsvField("POS ID", "tenants[*].organizations[*].pos[*].id", false),
-        new CsvField("POS TITLE", "tenants[*].organizations[*].pos[*].title", false)
-    );
-    TableData table = new DefaultTableData("Test Convert", "test-convert.csv", fields);
-    return table;
   }
 
 }
