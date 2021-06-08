@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -34,9 +33,6 @@ import cz.inventi.model.JsonPath;
 import cz.inventi.model.TableData;
 import lombok.RequiredArgsConstructor;
 
-/**
- * @author Marek Rojik
- */
 @RequiredArgsConstructor
 @SuppressWarnings({ "PMD_PATH_TRAVERSAL_OUT" })
 public class CsvConvertor {
@@ -74,14 +70,16 @@ public class CsvConvertor {
    * Convert part of DFKA json to specified DSFinV-K CSV file
    */
   private void convertTableMetaData(TableData tableMetaData, DocumentContext jsonContext, String target)
-    throws IOException {
-    log.debug(String.format("Converting JSON file to CSV file %s (%s).", tableMetaData.getName(), tableMetaData.getFileName()));
+      throws IOException {
+    log.debug(String
+        .format("Converting JSON file to CSV file %s (%s).", tableMetaData.getName(), tableMetaData.getFileName()));
     List<JsonPath> rowPaths = getAllJsonPath(tableMetaData, jsonContext);
     JsonPath head = new JsonPath().toBuilder().children(rowPaths).build();
 
     log.debug(String.format("Generating CSV file %s (%s).", tableMetaData.getName(), tableMetaData.getFileName()));
     generateFile(tableMetaData, head, jsonContext, target);
-    log.info(String.format("CSV file šs (šs) was successfully created.", tableMetaData.getName(), tableMetaData.getFileName()));
+    log.info(String
+        .format("CSV file šs (šs) was successfully created.", tableMetaData.getName(), tableMetaData.getFileName()));
   }
 
   /**
@@ -90,7 +88,7 @@ public class CsvConvertor {
    * If JSON path doesn't contain array, save JSON path with array indexes
    */
   private void parseJsonPathField(final String originalJsonPath, String modifiedJsonPath, List<JsonPath> jsonPaths,
-    DocumentContext context) {
+      DocumentContext context) {
     String arrayPathId = StringUtils.substringBeforeLast(originalJsonPath, ARRAY_IDENTIFIER_WITH_BRACKETS);
     JsonPath actualArrayPath = findJsonPathByArray(jsonPaths, arrayPathId);
 
@@ -114,8 +112,8 @@ public class CsvConvertor {
 
         log.trace("Check if JSON path already exists in parsed list.");
         JsonPath parentPath = findJsonPathByArray(
-          jsonPaths,
-          StringUtils.substringBeforeLast(arrayPathId, ARRAY_IDENTIFIER_WITH_BRACKETS)
+            jsonPaths,
+            StringUtils.substringBeforeLast(arrayPathId, ARRAY_IDENTIFIER_WITH_BRACKETS)
         );
 
         if (parentPath != null) {
@@ -126,13 +124,15 @@ public class CsvConvertor {
       }
 
       if (count == 1) {
-        log.trace(String.format("JSON path %s contains exactly one array -> add array indexes for the JSON path.", modifiedJsonPath));
+        log.trace(String.format("JSON path %s contains exactly one array -> add array indexes for the JSON path.",
+            modifiedJsonPath));
         List<Integer> arrayIndexes = findJsonPathIndexes(modifiedJsonPath);
         actualArrayPath.getArrayIndexes().put(arrayIndexes, arraySize);
       }
 
       if (arraySize == 0) {
-        log.trace(String.format("Array %s is empty, set one value to iterate each subarray-items at least 1x.", jsonPathWithoutArray));
+        log.trace(String.format("Array %s is empty, set one value to iterate each subarray-items at least 1x.",
+            jsonPathWithoutArray));
         arraySize = 1;
       }
 
@@ -161,7 +161,7 @@ public class CsvConvertor {
    * 2) Generate all rows.
    */
   public void generateFile(TableData metadata, JsonPath jsonPath, final DocumentContext context, String target)
-    throws IOException {
+      throws IOException {
     Path targetPath = Paths.get(target, FilenameUtils.getName(metadata.getFileName()));
 
     char encapsulation = metadata.getTextEncapsulator().charAt(0);
@@ -169,8 +169,8 @@ public class CsvConvertor {
     String recordDelimiter = metadata.getRecordDelimiter();
 
     try (ICsvListWriter listWriter = new CsvListWriter(
-      new FileWriter(targetPath.toString(), StandardCharsets.UTF_8),
-      new CsvPreference.Builder(encapsulation, delimiterChar, recordDelimiter).build()
+        new FileWriter(targetPath.toString(), StandardCharsets.UTF_8),
+        new CsvPreference.Builder(encapsulation, delimiterChar, recordDelimiter).build()
     )) {
       String[] header = metadata.getFields().stream().map(Field::getName).toArray(String[]::new);
       listWriter.writeHeader(header);
@@ -179,7 +179,7 @@ public class CsvConvertor {
     List<CsvRow> rows = new ArrayList<>();
     log.trace(String.format("Start generating CSV file %s (%s) rows.", metadata.getName(), metadata.getFileName()));
     for (JsonPath path : jsonPath.getChildren()) {
-      generateRow(metadata, path, rows, new ArrayList<>(), -1, context, target, new ArrayList<>());
+      generateRow(metadata, path, rows, new ArrayList<>(), -1, context, target);
     }
   }
 
@@ -189,9 +189,9 @@ public class CsvConvertor {
    * 2) If JSON path doesn't contain children, save JSON path with defined array indexes (or without indexes if JSON path isn't array)
    * 3) When CSV file row is complete -> generate row with real DFKA values.
    */
-  private List<String> generateRow(TableData tableMetaData, JsonPath path, List<CsvRow> rows,
-    List<Integer> indexes, final int actualIndex, final DocumentContext jsonContext, String target, List<String> previousLineValues)
-    throws IOException {
+  private void generateRow(TableData tableMetaData, JsonPath path, List<CsvRow> rows,
+      List<Integer> indexes, final int actualIndex, final DocumentContext jsonContext, String target)
+      throws IOException {
     if (path.getJsonPath() != null) {
       CsvRow row = new CsvRow(path.getJsonPath(), new ArrayList<>(indexes));
 
@@ -199,7 +199,8 @@ public class CsvConvertor {
         row.getIndexes().add(actualIndex);
       }
 
-      log.trace(String.format("Create row with JSON path %s and array indexes {}.", path.getJsonPath(), row.getIndexes()));
+      log.trace(
+          String.format("Create row with JSON path %s and array indexes {}.", path.getJsonPath(), row.getIndexes()));
       rows.add(row);
     } else if (!path.getChildren().isEmpty()) {
       List<Integer> newIndexes = new ArrayList<>(indexes);
@@ -211,7 +212,8 @@ public class CsvConvertor {
       Integer countArrayObjects = path.getArrayIndexes().get(newIndexes);
 
       if (countArrayObjects == 0) {
-        log.trace(String.format("Array for %s is empty, set one value to iterate the items at least 1x.", path.getJsonPath()));
+        log.trace(String
+            .format("Array for %s is empty, set one value to iterate the items at least 1x.", path.getJsonPath()));
         countArrayObjects = 1;
       }
 
@@ -220,24 +222,23 @@ public class CsvConvertor {
 
         List<CsvRow> newRows = new ArrayList<>(rows);
         for (JsonPath childPath : path.getChildren()) {
-          previousLineValues = generateRow(tableMetaData, childPath, newRows, newIndexes, y, jsonContext, target,
-            previousLineValues);
+          generateRow(tableMetaData, childPath, newRows, newIndexes, y, jsonContext, target);
         }
       }
     }
 
     if (rows.size() == tableMetaData.getFields().size()) {
-      log.trace(String.format("CSV row (%s) is complete -> generate CSV row with real values from JSON file.", tableMetaData.getName()));
-      previousLineValues = writeCsvRow(tableMetaData, rows, jsonContext, target, previousLineValues);
+      log.trace(String.format("CSV row (%s) is complete -> generate CSV row with real values from JSON file.",
+          tableMetaData.getName()));
+      writeCsvRow(tableMetaData, rows, jsonContext, target);
     }
-    return previousLineValues;
   }
 
   /**
    * Write one CSV row into CSV file.
    */
-  private List<String> writeCsvRow(TableData table, List<CsvRow> rows,
-    final DocumentContext context, String target, List<String> previousLineValues) throws IOException {
+  private void writeCsvRow(TableData table, List<CsvRow> rows,
+      final DocumentContext context, String target) throws IOException {
     String path = Paths.get(target, table.getFileName()).toString();
     List<String> currentLineValues = new ArrayList<>();
 
@@ -250,34 +251,35 @@ public class CsvConvertor {
       if (!row.getIndexes().isEmpty()) {
         CsvRow finalRow = row;
         finalRow.getIndexes().forEach(
-          index -> finalRow.setJsonPath(finalRow.getJsonPath().replaceFirst("\\" + ARRAY_IDENTIFIER, index + ""))
+            index -> finalRow.setJsonPath(finalRow.getJsonPath().replaceFirst("\\" + ARRAY_IDENTIFIER, index + ""))
         );
       }
       boolean isPropertyValueExist = writePropertyValue(currentLineValues, table, row, originalJsonPath, context);
       if (!isPropertyValueExist) {
-        log.debug(String.format("For the property '%s' doesn't exist any value, skip the whole line.", row.getJsonPath()));
-        return previousLineValues;
+        log.debug(
+            String.format("For the property '%s' doesn't exist any value, skip the whole line.", row.getJsonPath()));
+        return;
       }
     }
-      try (BufferedWriter writer = new BufferedWriter(new FileWriter(path, StandardCharsets.UTF_8, true))) {
-        for (int i = 0; i < currentLineValues.size(); i++) {
-          writer.write(currentLineValues.get(i));
-          if (i < currentLineValues.size() - 1) {
-            writer.write(table.getColumnDelimiter());
-          }
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter(path, StandardCharsets.UTF_8, true))) {
+      for (int i = 0; i < currentLineValues.size(); i++) {
+        writer.write(currentLineValues.get(i));
+        if (i < currentLineValues.size() - 1) {
+          writer.write(table.getColumnDelimiter());
         }
-        writer.newLine();
       }
-    return currentLineValues;
+      writer.newLine();
+    }
   }
 
   /**
    * Get value from JSON context and put it into line collection.
    * If the property is somehow special (based on taxonomy version), the value does not need to be put into collection
+   *
    * @return If the property value exists or is not required -> true. Otherwise the property value is required and doesn't exist -> false.
    */
   private boolean writePropertyValue(List<String> currentLineValues, TableData table,
-    CsvRow row, String originalJsonPath, DocumentContext context) {
+      CsvRow row, String originalJsonPath, DocumentContext context) {
     String propertyValue = null;
 
     try {
@@ -388,17 +390,17 @@ public class CsvConvertor {
 
   private TableData createCsvDefinition() {
     List<Field> fields = List.of(
-      new CsvField("NAME", "name", false),
-      new CsvField("VERSION", "version", false),
-      new CsvField("DATE", "date", false),
-      new CsvField("OPTION", "options.name", false),
-      new CsvField("TENANT ID", "tenants[*].id", false),
-      new CsvField("TENANT NAME", "tenants[*].name", false),
-      new CsvField("ORGANIZATION ID", "tenants[*].organizations[*].id", false),
-      new CsvField("ORGANIZATION NAME", "tenants[*].organizations[*].name", false),
-      new CsvField("ORGANIZATION CREATED", "tenants[*].organizations[*].created", false),
-      new CsvField("POS ID", "tenants[*].organizations[*].pos[*].id", false),
-      new CsvField("POS TITLE", "tenants[*].organizations[*].pos[*].title", false)
+        new CsvField("NAME", "name", false),
+        new CsvField("VERSION", "version", false),
+        new CsvField("DATE", "date", false),
+        new CsvField("OPTION", "options.name", false),
+        new CsvField("TENANT ID", "tenants[*].id", false),
+        new CsvField("TENANT NAME", "tenants[*].name", false),
+        new CsvField("ORGANIZATION ID", "tenants[*].organizations[*].id", false),
+        new CsvField("ORGANIZATION NAME", "tenants[*].organizations[*].name", false),
+        new CsvField("ORGANIZATION CREATED", "tenants[*].organizations[*].created", false),
+        new CsvField("POS ID", "tenants[*].organizations[*].pos[*].id", false),
+        new CsvField("POS TITLE", "tenants[*].organizations[*].pos[*].title", false)
     );
     TableData table = new DefaultTableData("Test Convert", "test-convert.csv", fields);
     return table;
