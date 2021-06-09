@@ -10,6 +10,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+// What mean its fields?
+// Make this object immutable?
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

@@ -16,7 +16,8 @@ import java.util.stream.Collectors;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.supercsv.io.CsvListWriter;
 import org.supercsv.io.ICsvListWriter;
 import org.supercsv.prefs.CsvPreference;
@@ -42,7 +43,7 @@ public class CsvConvertor {
   private static final String NUMBER_ARRAY_IDENTIFIER_WITH_BRACKETS_REGEX = "\\[(\\d+)]";
   private static final String ARRAY_IDENTIFIER_WITH_BRACKETS_REGEX = "\\[\\" + ARRAY_IDENTIFIER + "]";
 
-  private static final Logger log = Logger.getLogger(CsvConvertor.class);
+  private static final Logger log = LogManager.getLogger(CsvConvertor.class);
 
   /**
    * Find all JSON path with array indexes for DSFinV-K file in param

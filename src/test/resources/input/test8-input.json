@@ -1,0 +1,49 @@
+{
+  "name": "Field name",
+  "version": "1.0.0",
+  "date": "2021-07-05",
+  "options": {
+    "advanced": "value"
+  },
+  "organizations": [
+    {
+      "id": "42e2190f-7fb5-4b19-97e5-8f6c90276167",
+      "name": "First test organization",
+      "description": "First description",
+      "users": [
+        {
+          "id": "a1535974-5946-4d07-80da-1a55925bf912",
+          "name": "First test user"
+        },
+        {
+          "id": "69c5abb9-7a10-43ab-bee9-e5ac3d0f745b",
+          "name": "Second test user"
+        },
+        {
+          "id": "lwmrftvs-ypwd-b65w-o9hc-x8n4w95iogo0",
+          "name": "Third test user"
+        },
+        {
+          "id": "f8kdwhh9-mmfa-umn3-uk6rtajiqystj4mo",
+          "name": "Fourth test user"
+        }
+      ]
+
+    },
+    {
+      "id": "53d3def7-d402-4d04-845e-b9da7c532dbd",
+      "name": "Second test organization",
+      "description": "Second description",
+      "users": [
+        {
+          "id": "okqbgvmb-rjdm-uino-swgj60nocadn8g5w",
+          "name": "Fifth test user"
+        },
+        {
+          "id": "0d93fe40-bb90-4f17-b83f-78437754da89",
+          "name": "Sixth test user"
+        }
+      ]
+    }
+  ]
+}

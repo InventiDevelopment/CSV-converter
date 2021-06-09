@@ -1,0 +1,95 @@
+{
+  "name": "Field name",
+  "version": "1.0.0",
+  "date": "2021-07-05",
+  "options": {
+    "name": "Option #1 name"
+  },
+  "tenants": [
+    {
+      "id": "42e2190f-7fb5-4b19-97e5-8f6c90276167",
+      "name": "First test tenant",
+      "type": "standard",
+      "organizations": [
+        {
+          "id": "53d3def7-d402-4d04-845e-b9da7c532dbd",
+          "name": "First organization name",
+          "created": "2021-06-07T12:25:12",
+          "version": "2.1.3",
+          "pos": [
+            {
+              "id": "0d93fe40-bb90-4f17-b83f-78437754da89",
+              "title": "POS title #1"
+            },
+            {
+              "id": "56ae7217-2b4f-45c9-9d28-5ae9b9413338",
+              "title": "POS title #2"
+            }
+          ]
+        },
+        {
+          "id": "a1535974-5946-4d07-80da-1a55925bf912",
+          "name": "Second organization name",
+          "created": "2021-04-01T20:35:12",
+          "version": "22.0.1",
+          "pos": [
+            {
+              "id": "0d93fe40-bb90-4f17-b83f-78437754da89",
+              "title": "POS title #1"
+            },
+            {
+              "id": "56ae7217-2b4f-45c9-9d28-5ae9b9413338",
+              "title": "POS title #2"
+            }
+          ]
+        },
+        {
+          "id": "69c5abb9-7a10-43ab-bee9-e5ac3d0f745b",
+          "name": "Third organization name",
+          "created": "2020-01-24T10:25:12",
+          "version": "3.5.1",
+          "pos": [
+            {
+              "id": "0d93fe40-bb90-4f17-b83f-78437754da89",
+              "title": "POS title #1"
+            },
+            {
+              "id": "56ae7217-2b4f-45c9-9d28-5ae9b9413338",
+              "title": "POS title #2"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "42e2190f-7fb5-4b19-97e5-8f6c90276167",
+      "name": "Second test tenant",
+      "type": "standard",
+      "organizations": [
+        {
+          "id": "53d3def7-d402-4d04-845e-b9da7c532dbd",
+          "name": "First organization name",
+          "created": "2021-06-07T12:25:12",
+          "version": "2.1.3"
+        },
+        {
+          "id": "a1535974-5946-4d07-80da-1a55925bf912",
+          "name": "Second organization name",
+          "created": "2021-04-01T20:35:12",
+          "version": "22.0.1"
+        },
+        {
+          "id": "69c5abb9-7a10-43ab-bee9-e5ac3d0f745b",
+          "name": "Third organization name",
+          "created": "2020-01-24T10:25:12",
+          "version": "3.5.1"
+        }
+      ]
+    },
+    {
+      "id": "gn5wjn6r-7fb5-4b19-97e5-8f6c90276167",
+      "name": "Third test tenant",
+      "type": "standard"
+    }
+  ]
+}
