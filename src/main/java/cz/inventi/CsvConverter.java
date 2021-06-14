@@ -26,7 +26,6 @@ import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.PathNotFoundException;
 
-import cz.inventi.model.CsvField;
 import cz.inventi.model.CsvRow;
 import cz.inventi.model.DefaultTableData;
 import cz.inventi.model.Field;
@@ -36,14 +35,14 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @SuppressWarnings({ "PMD_PATH_TRAVERSAL_OUT" })
-public class CsvConvertor {
+public class CsvConverter {
 
   public static final String ARRAY_IDENTIFIER = "*";
   public static final String ARRAY_IDENTIFIER_WITH_BRACKETS = "[" + ARRAY_IDENTIFIER + "]";
   private static final String NUMBER_ARRAY_IDENTIFIER_WITH_BRACKETS_REGEX = "\\[(\\d+)]";
   private static final String ARRAY_IDENTIFIER_WITH_BRACKETS_REGEX = "\\[\\" + ARRAY_IDENTIFIER + "]";
 
-  private static final Logger log = LogManager.getLogger(CsvConvertor.class);
+  private static final Logger log = LogManager.getLogger(CsvConverter.class);
 
   /**
    * Find all JSON path with array indexes for DSFinV-K file in param

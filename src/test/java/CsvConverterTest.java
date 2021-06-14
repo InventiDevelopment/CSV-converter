@@ -16,7 +16,7 @@ import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import cz.inventi.CsvConvertor;
+import cz.inventi.CsvConverter;
 import cz.inventi.model.CsvField;
 import cz.inventi.model.DefaultTableData;
 import cz.inventi.model.Field;
@@ -28,7 +28,7 @@ public class CsvConverterTest {
   private static final String TEST_RESOURCES_OUTPUT_FOLDER = "src/test/resources/output";
 
   private static final String TEST_OUTPUT_FOLDER = "output";
-  private CsvConvertor csvConvertor = new CsvConvertor();
+  private CsvConverter csvConverter = new CsvConverter();
   private static final Logger log = LogManager.getLogger(CsvConverterTest.class);
 
   @BeforeEach
@@ -240,7 +240,7 @@ public class CsvConverterTest {
   }
 
   private List<List<String>> convertJsonToCsv(String source, TableData csvDefinition) throws IOException {
-    csvConvertor.convert(TEST_RESOURCES_INPUT_FOLDER + "/" + source, TEST_OUTPUT_FOLDER, csvDefinition);
+    csvConverter.convert(TEST_RESOURCES_INPUT_FOLDER + "/" + source, TEST_OUTPUT_FOLDER, csvDefinition);
     return readGeneratedFile(csvDefinition);
   }
 
