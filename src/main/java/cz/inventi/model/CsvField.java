@@ -1,15 +1,18 @@
 package cz.inventi.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Value;
 
-// Why is not immutable? Why we need setJsonPath() in Field interface
-@Data
+/**
+ * Implementation of {@link Field} for CSV.
+ */
+@Value
 @AllArgsConstructor
 public class CsvField implements Field {
-
-  private final String name;
-  private String jsonPath;
-  private boolean required;
-
+  /**
+   * Used as CSV column name
+   */
+  String name;
+  String jsonPath;
+  boolean required;
 }

@@ -13,27 +13,30 @@ import java.util.stream.Collectors;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import cz.inventi.CsvConverter;
 import cz.inventi.model.CsvField;
-import cz.inventi.model.DefaultTableData;
+import cz.inventi.model.DefaultCsvDefinition;
 import cz.inventi.model.Field;
-import cz.inventi.model.TableData;
+import cz.inventi.model.CsvDefinition;
+import org.junit.jupiter.api.TestInstance;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS) // needed for using @AfterAll
 public class CsvConverterTest {
 
   private static final String TEST_RESOURCES_INPUT_FOLDER = "src/test/resources/input";
   private static final String TEST_RESOURCES_OUTPUT_FOLDER = "src/test/resources/output";
 
   private static final String TEST_OUTPUT_FOLDER = "output";
-  private CsvConverter csvConverter = new CsvConverter();
+  private final CsvConverter csvConverter = new CsvConverter();
   private static final Logger log = LogManager.getLogger(CsvConverterTest.class);
 
   @BeforeEach
-  // clean also on the end of all tests
-  void setUp() throws IOException {
+  @AfterAll
+  void clean() throws IOException {
     FileUtils.deleteDirectory(new File(TEST_OUTPUT_FOLDER));
   }
 
@@ -135,7 +138,7 @@ public class CsvConverterTest {
   }
 
   // objects array + strings array
-  // TODO this test doesn't work, output CSV is empty (with only header)
+  // TODO FUTURE this test doesn't work, output CSV is empty (with only header)
   @Test
   void convertJsonFile__withTwoArraysOnTheSameLevel__allFieldsAreOptional() throws IOException {
     runTest("test7-input.json", "test7-output.csv", 1,
@@ -202,6 +205,13 @@ public class CsvConverterTest {
     runTest("test13-input.json", "test13-output.csv", 10, getComplexStructureTestFields());
   }
 
+  //TODO FUTURE Test with more arrays on the same level - for multiple levels:
+  //array: [
+  //{nestedOne: [{nestedOne: [], nestedTwo:[]}], nestedTwo:[{nestedOne: [], nestedTwo:[]}]}
+  //]
+
+
+
   private List<Field> getComplexStructureTestFields() {
     return List.of(
             new CsvField("NAME", "name", false),
@@ -219,14 +229,14 @@ public class CsvConverterTest {
   }
 
   private void runTest(String inputJsonFilename, String expectedCsvOutputFilename, int expectedNumberOfRowsExcludingHeader, List<Field> fields) throws IOException {
-    TableData csvDefinition = new DefaultTableData("Test Convert " + inputJsonFilename, inputJsonFilename.replace("-input.json", "-convert.csv"), fields);
+    CsvDefinition csvDefinition = new DefaultCsvDefinition("Test Convert " + inputJsonFilename, inputJsonFilename.replace("-input.json", "-convert.csv"), fields);
 
     List<List<String>> actualCsvOutput = convertJsonToCsv(inputJsonFilename, csvDefinition);
 
     checkOutputFile(actualCsvOutput, expectedNumberOfRowsExcludingHeader, TEST_RESOURCES_OUTPUT_FOLDER + "/" + expectedCsvOutputFilename, csvDefinition);
   }
 
-  private void checkOutputFile(List<List<String>> actualCsvOutput, int expectedNumberOfRowsExcludingHeader, String expectedCsvOutputFilename, TableData csvDefinition) {
+  private void checkOutputFile(List<List<String>> actualCsvOutput, int expectedNumberOfRowsExcludingHeader, String expectedCsvOutputFilename, CsvDefinition csvDefinition) {
     assertNotNull(actualCsvOutput);
     assertEquals(expectedNumberOfRowsExcludingHeader + 1, actualCsvOutput.size());
     assertTrue(actualCsvOutput.stream().allMatch(row -> row.size() == csvDefinition.getFields().size()));
@@ -239,12 +249,12 @@ public class CsvConverterTest {
     assertIterableEquals(expectedCsvOutput, actualCsvOutput);
   }
 
-  private List<List<String>> convertJsonToCsv(String source, TableData csvDefinition) throws IOException {
+  private List<List<String>> convertJsonToCsv(String source, CsvDefinition csvDefinition) throws IOException {
     csvConverter.convert(TEST_RESOURCES_INPUT_FOLDER + "/" + source, TEST_OUTPUT_FOLDER, csvDefinition);
     return readGeneratedFile(csvDefinition);
   }
 
-  private List<List<String>> readGeneratedFile(TableData csvFile) {
+  private List<List<String>> readGeneratedFile(CsvDefinition csvFile) {
     return readCsvFile(Paths.get(TEST_OUTPUT_FOLDER, csvFile.getFileName()).toString(), csvFile.getEncoding(), csvFile.getColumnDelimiter());
   }
 
