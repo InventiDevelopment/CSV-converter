@@ -2,13 +2,12 @@ package cz.inventi.model;
 
 import java.util.List;
 
-import cz.inventi.Constants;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
 import org.apache.commons.lang3.StringUtils;
 
-import static cz.inventi.Constants.ESCAPED_ARRAY_IDENTIFIER;
+import static cz.inventi.model.JsonPath.ESCAPED_ARRAY_IDENTIFIER;
 
 /**
  * Defines where needed JSON property value (will be written to this CSV cell) should be searched (by path).
@@ -22,7 +21,7 @@ public class CsvCell {
    */
   String jsonPath;
   /**
-   * Real indexes for {@link Constants#ARRAY_IDENTIFIER}s in jsonPath
+   * Real indexes for {@link JsonPath#ARRAY_IDENTIFIER}s in jsonPath
    */
   List<Integer> indexes;
   /**

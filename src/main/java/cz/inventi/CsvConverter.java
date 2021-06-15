@@ -18,8 +18,8 @@ import com.jayway.jsonpath.PathNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
-import static cz.inventi.Constants.ARRAY_IDENTIFIER_WITH_BRACKETS;
-import static cz.inventi.Constants.ESCAPED_ARRAY_IDENTIFIER;
+import static cz.inventi.model.JsonPath.ARRAY_IDENTIFIER_WITH_BRACKETS;
+import static cz.inventi.model.JsonPath.ESCAPED_ARRAY_IDENTIFIER;
 import static cz.inventi.model.JsonPath.countNestedArrays;
 import static cz.inventi.model.JsonPath.findJsonPathIndexes;
 import static cz.inventi.model.JsonPath.getParentJsonPathString;
@@ -100,17 +100,17 @@ public class CsvConverter {
    *
    * <ol>
    *   <li>
-   *    If modifiedJsonPath doesn't contain {@link Constants#ARRAY_IDENTIFIER_WITH_BRACKETS},
+   *    If modifiedJsonPath doesn't contain {@link JsonPath#ARRAY_IDENTIFIER_WITH_BRACKETS},
    *    then adds new PROPERTY json path to the tree.
    *   </li>
    *   <li>
-   *     If modifiedJsonPath contains more than one {@link Constants#ARRAY_IDENTIFIER_WITH_BRACKETS},
+   *     If modifiedJsonPath contains more than one {@link JsonPath#ARRAY_IDENTIFIER_WITH_BRACKETS},
    *     then checks the size of the least nested array and calls the method recursively with
    *     filled index to modifiedJsonPath
    *     (array index instead of '*', e.g. organizations[*].users[*].id -> organizations[0].users[*].id)
    *   </li>
    *   <li>
-   *     If modifiedJsonPath contains exactly one {@link Constants#ARRAY_IDENTIFIER_WITH_BRACKETS},
+   *     If modifiedJsonPath contains exactly one {@link JsonPath#ARRAY_IDENTIFIER_WITH_BRACKETS},
    *     then adds new ARRAY json path to the tree (if not yer exists there) with array indexes for its parent path
    *     (e.g. for organizations[0].users[1].emails[*].address saves organizations[0].users[1].emails
    *     with indexes [0, 1] -> size of 'emails' array)

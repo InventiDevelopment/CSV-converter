@@ -6,15 +6,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import cz.inventi.Constants;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 
-import static cz.inventi.Constants.ARRAY_IDENTIFIER_WITH_BRACKETS;
-import static cz.inventi.Constants.NUMBER_ARRAY_IDENTIFIER_WITH_BRACKETS_REGEX;
 import static cz.inventi.utils.StringUtils.findAllValuesByRegex;
 
 /**
@@ -27,6 +24,10 @@ import static cz.inventi.utils.StringUtils.findAllValuesByRegex;
 @Builder(toBuilder = true)
 @Log4j2
 public class JsonPath {
+  public static final String ARRAY_IDENTIFIER = "*";
+  public static final String ARRAY_IDENTIFIER_WITH_BRACKETS = "[" + ARRAY_IDENTIFIER + "]";
+  public static final String ESCAPED_ARRAY_IDENTIFIER = "\\" + ARRAY_IDENTIFIER;
+  public static final String NUMBER_ARRAY_IDENTIFIER_WITH_BRACKETS_REGEX = "\\[(\\d+)]";
 
   /**
    * Type of JSON path
@@ -160,7 +161,7 @@ public class JsonPath {
 
   /**
    * @param jsonPath json path
-   * @return counted matches of {@link Constants#ARRAY_IDENTIFIER_WITH_BRACKETS} in provided json path.
+   * @return counted matches of {@link JsonPath#ARRAY_IDENTIFIER_WITH_BRACKETS} in provided json path.
    */
   public static int countNestedArrays(String jsonPath) {
     log.trace("Check if the jsonPath {} contains array with '*'", jsonPath);
