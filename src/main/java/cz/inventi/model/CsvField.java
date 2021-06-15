@@ -5,12 +5,13 @@ import lombok.Value;
 
 /**
  * Implementation of {@link Field} for CSV.
+ * Represents one column definition of CSV.
  */
 @Value
 @AllArgsConstructor
 public class CsvField implements Field {
   /**
-   * Used as CSV column name
+   * Name of related column in output CSV
    */
   String name;
   String jsonPath;

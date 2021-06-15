@@ -1,16 +1,16 @@
 package cz.inventi.model;
 
 /**
- * Definition of needed JSON property, that should be written to target file.
+ * Definition of one field of target file.
  */
 public interface Field {
   /**
-   * @return field name that is used as column name
+   * @return field name
    */
   String getName();
 
   /**
-   * @return json path of property, which value should be written to column
+   * @return path to related JSON property, that should be converted to this field
    */
   String getJsonPath();
 

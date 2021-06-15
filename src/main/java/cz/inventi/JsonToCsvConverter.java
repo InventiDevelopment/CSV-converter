@@ -158,14 +158,22 @@ public class JsonToCsvConverter {
   }
 
   /**
-   * TODO update javadoc
    * Generate CSV file rows
-   * 1) If JSON path contains children, get number of array indexes and create one row for each object in array
-   * 2) If JSON path doesn't contain children, save JSON path with defined array indexes (or without indexes if JSON path doesn't contain array)
-   * as CSV cell to current CSV row
-   * 3) When current CSV row is complete -> write row with real values.
-   *
+   * <ol>
+   *   <li>
+   *     If JSON path contains children, get number of array indexes and create one row for each object in array
+   *   </li>
+   *   <li>
+   *     If JSON path doesn't contain children, save JSON path with defined array indexes (or without indexes if JSON path doesn't contain array)
+   *     as CSV cell to current CSV row
+   *   </li>
+   *   <li>
+   *     When current CSV row is complete -> write row with real values.
+   *   </li>
+   * </ol>
+   * <p>
    * For leaf (PROPERTY type) json paths, that don't have any ARRAY parents, CSV cells will be permanently added to current row.
+   * Other cells will be added to different row objects created during recursion.
    *
    * @param csvDefinition definition of target CSV format
    * @param path          processed json path
