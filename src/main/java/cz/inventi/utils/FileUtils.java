@@ -26,7 +26,7 @@ public class FileUtils {
    * @param target path to target directory
    * @throws IOException when directory doesn't exist and couldn't be created.
    */
-  public static void ensureTargetExists(String target) throws IOException {
+  public static void ensureTargetDirectoryExists(String target) throws IOException {
     File directory = new File(target);
 
     if (!directory.exists() && !directory.mkdirs()) {

@@ -228,7 +228,9 @@ public class CsvConverterTest {
   }
 
   private void runTest(String inputJsonFilename, String expectedCsvOutputFilename, int expectedNumberOfRowsExcludingHeader, List<Field> fields) throws IOException {
-    CsvDefinition csvDefinition = new DefaultCsvDefinition("Test Convert " + inputJsonFilename, inputJsonFilename.replace("-input.json", "-convert.csv"), fields);
+    String actualOutputFilename = Paths.get(TEST_OUTPUT_FOLDER, inputJsonFilename.replace("-input.json", "-convert.csv")).toString();
+
+    CsvDefinition csvDefinition = new DefaultCsvDefinition("Test Convert " + inputJsonFilename, actualOutputFilename, fields);
 
     List<List<String>> actualCsvOutput = convertJsonToCsv(inputJsonFilename, csvDefinition);
 
@@ -249,15 +251,16 @@ public class CsvConverterTest {
   }
 
   private List<List<String>> convertJsonToCsv(String source, CsvDefinition csvDefinition) throws IOException {
-    csvConverter.convert(TEST_RESOURCES_INPUT_FOLDER + "/" + source, TEST_OUTPUT_FOLDER, csvDefinition);
+    csvConverter.convert(TEST_RESOURCES_INPUT_FOLDER + "/" + source, csvDefinition);
     return readGeneratedFile(csvDefinition);
   }
 
   private List<List<String>> readGeneratedFile(CsvDefinition csvFile) {
-    return readCsvFile(Paths.get(TEST_OUTPUT_FOLDER, csvFile.getFileName()).toString(), csvFile.getEncoding(), csvFile.getColumnDelimiter());
+    return readCsvFile(csvFile.getFileName(), csvFile.getEncoding(), csvFile.getColumnDelimiter());
   }
 
   private List<List<String>> readCsvFile(String filename, String encoding, String columnDelimiter) {
+    // TODO here can be used ICsvListReader from supercsv library
     List<String> files;
     try {
       files = FileUtils.readLines(new File(filename), encoding);

@@ -25,7 +25,7 @@ import static cz.inventi.model.JsonPath.findJsonPathIndexes;
 import static cz.inventi.model.JsonPath.getParentJsonPathString;
 import static cz.inventi.utils.CsvUtils.createCsvFile;
 import static cz.inventi.utils.CsvUtils.writeCsvRow;
-import static cz.inventi.utils.FileUtils.ensureTargetExists;
+import static cz.inventi.utils.FileUtils.ensureTargetDirectoryExists;
 import static cz.inventi.utils.JsonUtils.getArraySize;
 import static cz.inventi.utils.JsonUtils.parseJsonFile;
 import static cz.inventi.utils.ListUtils.extendedList;
@@ -42,36 +42,35 @@ public class CsvConverter {
    * Convert source JSON file to new created CSV target file.
    *
    * @param source        source JSON filename
-   * @param target        target CSV filename
    * @param csvDefinition definition of target CSV format
    * @throws IOException when some I/O problem occurred
    */
-  public void convert(String source, String target, CsvDefinition csvDefinition) throws IOException {
+  public void convert(String source, CsvDefinition csvDefinition) throws IOException {
     DocumentContext jsonContext = parseJsonFile(source);
-    ensureTargetExists(target);
-    convertJsonToCsv(jsonContext, target, csvDefinition);
+    String targetDirectory = Paths.get(csvDefinition.getFileName()).getParent().toString();
+    ensureTargetDirectoryExists(targetDirectory);
+    convertJsonToCsv(jsonContext, csvDefinition);
   }
 
   /**
    * Converts part of JSON to specified CSV file.
    *
    * @param jsonContext   source JSON context
-   * @param target        target CSV filename
    * @param csvDefinition definition of target CSV format
    * @throws IOException when some I/O problem occurred
    */
-  private void convertJsonToCsv(DocumentContext jsonContext, String target, CsvDefinition csvDefinition)
+  private void convertJsonToCsv(DocumentContext jsonContext, CsvDefinition csvDefinition)
           throws IOException {
     log.debug("Converting JSON file to CSV file {} ({}).", csvDefinition.getName(), csvDefinition.getFileName());
     JsonPath root = getJsonPathsTree(jsonContext, csvDefinition);
 
     log.debug("Generating CSV file {} ({}).", csvDefinition.getName(), csvDefinition.getFileName());
-    createCsvFile(csvDefinition, target);
+    createCsvFile(csvDefinition);
 
     log.trace("Start generating CSV file {} ({}) rows.", csvDefinition.getName(), csvDefinition.getFileName());
     List<CsvCell> row = new ArrayList<>();
     for (JsonPath path : root.getChildren()) {
-      generateRow(csvDefinition, path, row, new ArrayList<>(), jsonContext, target);
+      generateRow(csvDefinition, path, row, new ArrayList<>(), jsonContext);
     }
     log.info("CSV file {} ({}) was successfully created.", csvDefinition.getName(), csvDefinition.getFileName());
   }
@@ -173,12 +172,11 @@ public class CsvConverter {
    * @param row           CSV row
    * @param indexes       current indexes of json path
    * @param jsonContext   source JSON context
-   * @param target        target CSV filename
    * @throws IOException when some I/O problem occurred
    */
   // TODO FUTURE after refactoring - Cover the case with more arrays on the same level
   private void generateRow(CsvDefinition csvDefinition, JsonPath path, List<CsvCell> row,
-                           List<Integer> indexes, final DocumentContext jsonContext, String target) throws IOException {
+                           List<Integer> indexes, final DocumentContext jsonContext) throws IOException {
     if (path.getChildren().isEmpty()) {
       log.trace("Create cell with JSON path {} and array indexes {}.", path.getPath(), indexes);
 
@@ -186,7 +184,7 @@ public class CsvConverter {
       row.add(new CsvCell(path.getPath(), indexes, currentField.isRequired()));
 
       if (row.size() == csvDefinition.getFields().size()) {
-        writeFoundRow(row, csvDefinition, jsonContext, target);
+        writeFoundRow(row, csvDefinition, jsonContext);
       }
     } else {
       Integer arraySize = path.getArrayIndexes().get(indexes);
@@ -204,7 +202,7 @@ public class CsvConverter {
         List<CsvCell> newRow = new ArrayList<>(row);
 
         for (JsonPath childPath : path.getChildren()) {
-          generateRow(csvDefinition, childPath, newRow, newIndexes, jsonContext, target);
+          generateRow(csvDefinition, childPath, newRow, newIndexes, jsonContext);
         }
       }
     }
@@ -217,15 +215,13 @@ public class CsvConverter {
    * @param row list of cells, defining where value should be found in JSON
    * @param csvDefinition definition of target CSV format
    * @param jsonContext source JSON context
-   * @param target target CSV filename
    * @throws IOException when some problem during writing to CSV file occurred
    */
-  private void writeFoundRow(List<CsvCell> row, CsvDefinition csvDefinition, DocumentContext jsonContext, String target) throws IOException {
+  private void writeFoundRow(List<CsvCell> row, CsvDefinition csvDefinition, DocumentContext jsonContext) throws IOException {
     log.trace("CSV row ({}) is complete -> generate CSV row with real values from JSON file.",
             csvDefinition.getName());
-    String filepath = Paths.get(target, csvDefinition.getFileName()).toString();
     List<String> values = obtainRowValuesFromJson(row, jsonContext);
-    writeCsvRow(filepath, values, csvDefinition.getColumnDelimiter());
+    writeCsvRow(csvDefinition, values);
   }
 
   /**
