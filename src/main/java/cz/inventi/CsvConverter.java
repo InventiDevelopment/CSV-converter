@@ -174,7 +174,6 @@ public class CsvConverter {
    * @param jsonContext   source JSON context
    * @throws IOException when some I/O problem occurred
    */
-  // TODO FUTURE after refactoring - Cover the case with more arrays on the same level
   private void generateRow(CsvDefinition csvDefinition, JsonPath path, List<CsvCell> row,
                            List<Integer> indexes, final DocumentContext jsonContext) throws IOException {
     if (path.getChildren().isEmpty()) {
@@ -189,7 +188,6 @@ public class CsvConverter {
     } else {
       Integer arraySize = path.getArrayIndexes().get(indexes);
 
-      // TODO DISCUSS what if arraySize is null?? IllegalStateException or also set to 1?
       if (arraySize == 0) {
         log.trace("Array for {} is empty, set one value to iterate the items at least 1x.", path.getPath());
         arraySize = 1;
@@ -257,8 +255,6 @@ public class CsvConverter {
 
   /**
    * Gets value of property defined by path from JSON context.
-   * TODO DISCUSS what it means? - If the property is somehow special (based on taxonomy version), the value does not need to be put into collection.
-   *
    *
    * @param jsonPath path of property, which value will be returned
    * @param context  JSON context
