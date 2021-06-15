@@ -6,21 +6,26 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import cz.inventi.model.*;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import cz.inventi.model.CsvCell;
+import cz.inventi.model.CsvDefinition;
+import cz.inventi.model.Field;
+import cz.inventi.model.JsonPath;
+import cz.inventi.model.JsonPathType;
 
+import org.apache.commons.lang3.StringUtils;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.PathNotFoundException;
-
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
-import static cz.inventi.Constants.*;
-import static cz.inventi.model.JsonPath.*;
+import static cz.inventi.Constants.ARRAY_IDENTIFIER_WITH_BRACKETS;
+import static cz.inventi.Constants.ESCAPED_ARRAY_IDENTIFIER;
+import static cz.inventi.model.JsonPath.countNestedArrays;
+import static cz.inventi.model.JsonPath.findJsonPathIndexes;
+import static cz.inventi.model.JsonPath.getParentJsonPathString;
 import static cz.inventi.utils.CsvUtils.createCsvFile;
 import static cz.inventi.utils.CsvUtils.writeCsvRow;
-import static cz.inventi.utils.FIleUtils.ensureTargetExists;
+import static cz.inventi.utils.FileUtils.ensureTargetExists;
 import static cz.inventi.utils.JsonUtils.getArraySize;
 import static cz.inventi.utils.JsonUtils.parseJsonFile;
 import static cz.inventi.utils.ListUtils.extendedList;

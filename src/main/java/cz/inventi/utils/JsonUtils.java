@@ -7,7 +7,7 @@ import lombok.extern.log4j.Log4j2;
 
 import java.io.IOException;
 
-import static cz.inventi.utils.FIleUtils.readFile;
+import static cz.inventi.utils.FileUtils.readFile;
 
 /**
  * Contains util methods useful for work with JSON files.

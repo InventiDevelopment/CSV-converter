@@ -3,7 +3,9 @@ package cz.inventi.model;
 import java.util.List;
 
 import cz.inventi.Constants;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Value;
 import org.apache.commons.lang3.StringUtils;
 
 import static cz.inventi.Constants.ESCAPED_ARRAY_IDENTIFIER;

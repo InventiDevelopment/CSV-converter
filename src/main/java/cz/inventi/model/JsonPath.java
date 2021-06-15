@@ -7,7 +7,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import cz.inventi.Constants;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Value;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 

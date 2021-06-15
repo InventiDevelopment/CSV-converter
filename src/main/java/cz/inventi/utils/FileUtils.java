@@ -1,7 +1,5 @@
 package cz.inventi.utils;
 
-import org.apache.commons.io.FileUtils;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -9,7 +7,7 @@ import java.nio.charset.StandardCharsets;
 /**
  * Contains methods for work with files and directories
  */
-public class FIleUtils {
+public class FileUtils {
 
   /**
    * Reads file with filename.
@@ -19,7 +17,7 @@ public class FIleUtils {
    * @throws IOException when file cannot be read
    */
   public static String readFile(String filename) throws IOException {
-    return FileUtils.readFileToString(new File(filename), StandardCharsets.UTF_8);
+    return org.apache.commons.io.FileUtils.readFileToString(new File(filename), StandardCharsets.UTF_8);
   }
 
   /**

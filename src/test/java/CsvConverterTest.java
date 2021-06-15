@@ -15,13 +15,13 @@ import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import cz.inventi.CsvConverter;
 import cz.inventi.model.CsvField;
 import cz.inventi.model.DefaultCsvDefinition;
 import cz.inventi.model.Field;
 import cz.inventi.model.CsvDefinition;
-import org.junit.jupiter.api.TestInstance;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS) // needed for using @AfterAll
 @Log4j2
