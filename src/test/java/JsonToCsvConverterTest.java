@@ -18,7 +18,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
-import cz.inventi.CsvConverter;
+import cz.inventi.JsonToCsvConverter;
 import cz.inventi.model.CsvField;
 import cz.inventi.model.DefaultCsvDefinition;
 import cz.inventi.model.Field;
@@ -26,13 +26,13 @@ import cz.inventi.model.CsvDefinition;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS) // needed for using @AfterAll
 @Log4j2
-public class CsvConverterTest {
+public class JsonToCsvConverterTest {
 
   private static final String TEST_RESOURCES_INPUT_FOLDER = "src/test/resources/input";
   private static final String TEST_RESOURCES_OUTPUT_FOLDER = "src/test/resources/output";
 
   private static final String TEST_OUTPUT_FOLDER = "output";
-  private final CsvConverter csvConverter = new CsvConverter();
+  private final JsonToCsvConverter jsonToCsvConverter = new JsonToCsvConverter();
 
   @BeforeEach
   @AfterAll
@@ -254,7 +254,7 @@ public class CsvConverterTest {
   }
 
   private List<List<String>> convertJsonToCsv(String source, CsvDefinition csvDefinition) throws IOException {
-    csvConverter.convert(TEST_RESOURCES_INPUT_FOLDER + "/" + source, csvDefinition);
+    jsonToCsvConverter.convert(TEST_RESOURCES_INPUT_FOLDER + "/" + source, csvDefinition);
     return readGeneratedFile(csvDefinition);
   }
 
