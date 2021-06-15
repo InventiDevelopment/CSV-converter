@@ -10,9 +10,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.FileUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,6 +24,7 @@ import cz.inventi.model.CsvDefinition;
 import org.junit.jupiter.api.TestInstance;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS) // needed for using @AfterAll
+@Log4j2
 public class CsvConverterTest {
 
   private static final String TEST_RESOURCES_INPUT_FOLDER = "src/test/resources/input";
@@ -32,7 +32,6 @@ public class CsvConverterTest {
 
   private static final String TEST_OUTPUT_FOLDER = "output";
   private final CsvConverter csvConverter = new CsvConverter();
-  private static final Logger log = LogManager.getLogger(CsvConverterTest.class);
 
   @BeforeEach
   @AfterAll

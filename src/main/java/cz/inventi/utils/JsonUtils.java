@@ -3,8 +3,7 @@ package cz.inventi.utils;
 import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.PathNotFoundException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
 
 import java.io.IOException;
 
@@ -13,8 +12,8 @@ import static cz.inventi.utils.FIleUtils.readFile;
 /**
  * Contains util methods useful for work with JSON files.
  */
+@Log4j2
 public class JsonUtils {
-  private static final Logger log = LogManager.getLogger(JsonUtils.class);
 
   /**
    * Parses JSON file.

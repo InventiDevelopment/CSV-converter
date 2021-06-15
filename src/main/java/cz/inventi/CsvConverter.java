@@ -30,8 +30,8 @@ import static cz.inventi.utils.ListUtils.extendedList;
  */
 @RequiredArgsConstructor
 @SuppressWarnings({"PMD_PATH_TRAVERSAL_OUT"})
+@Log4j2
 public class CsvConverter {
-  private static final Logger log = LogManager.getLogger(CsvConverter.class);
 
   /**
    * Convert source JSON file to new created CSV target file.

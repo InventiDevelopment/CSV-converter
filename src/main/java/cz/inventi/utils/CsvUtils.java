@@ -2,9 +2,8 @@ package cz.inventi.utils;
 
 import cz.inventi.model.Field;
 import cz.inventi.model.CsvDefinition;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.supercsv.io.CsvListWriter;
 import org.supercsv.io.ICsvListWriter;
 import org.supercsv.prefs.CsvPreference;
@@ -17,8 +16,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
+@Log4j2
 public class CsvUtils {
-  private static final Logger log = LogManager.getLogger(CsvUtils.class);
 
   public static void createCsvFile(CsvDefinition metadata, String target)
           throws IOException {

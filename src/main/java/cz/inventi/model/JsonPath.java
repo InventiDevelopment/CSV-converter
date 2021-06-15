@@ -8,9 +8,8 @@ import java.util.stream.Collectors;
 
 import cz.inventi.Constants;
 import lombok.*;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import static cz.inventi.Constants.ARRAY_IDENTIFIER_WITH_BRACKETS;
 import static cz.inventi.Constants.NUMBER_ARRAY_IDENTIFIER_WITH_BRACKETS_REGEX;
@@ -24,8 +23,8 @@ import static cz.inventi.utils.StringUtils.findAllValuesByRegex;
 @Value
 @AllArgsConstructor
 @Builder(toBuilder = true)
+@Log4j2
 public class JsonPath {
-  private static final Logger log = LogManager.getLogger(JsonPath.class);
 
   /**
    * Type of JSON path
