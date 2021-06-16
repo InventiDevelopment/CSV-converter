@@ -1,0 +1,16 @@
+{
+  "name": "Field name",
+  "version": "1.0.0",
+  "date": "2021-07-05",
+  "options": {
+    "advanced": "value"
+  },
+  "contacts": {
+    "emails": [
+      {"address": "email1@email.com", "active": true},
+      {"address": "email2@email.com", "active": false},
+      {"address": "email3@email.com"}
+    ],
+    "phones": ["12345", "67890", "13579"]
+  }
+}

@@ -12,7 +12,7 @@
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <json-path.version>2.4.0</json-path.version>
-        <log4j.version>1.2.17</log4j.version>
+        <log4j.version>2.14.1</log4j.version>
         <lombok.version>1.18.20</lombok.version>
         <commons-io.version>2.9.0</commons-io.version>
         <super-csv.version>2.4.0</super-csv.version>
@@ -35,11 +35,15 @@
         </dependency>
 
         <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
             <version>${log4j.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
