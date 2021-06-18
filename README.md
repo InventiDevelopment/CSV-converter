@@ -1,38 +1,37 @@
 # JSON to CSV converter
 
-This library provides configurable JSON → CSV converter. Main features are:
+This library provides a configurable JSON → CSV converter. The main features are:
 
-1. Define, which fields should be converted from JSON
-2. Define the names of converted fields in CSV (names of columns)
-3. Mark field as required if needed - then the whole row won't be added if this field isn't present
+1. Ability to define which fields should be converted from JSON.
+2. Ability to define the names of converted fields in CSV (columns headers).
+3. Mark field as required if needed - then the whole row won't be added if this field isn't present.
 
 ## How to use
-`JsonToCsvConverter.convert` receives source JSON filename and `CsvDefinition`. You can use prepared
-`DefaultCsvDefinition` and define only its name, target filename (full name with path) and list of `CsvField`.
+`JsonToCsvConverter.convert` receives the source JSON filename and `CsvDefinition`. There's
+`DefaultCsvDefinition` prepared, which you can use and define only its name, the target filename (full name, including the path) and list of `CsvField`.
 
-List of `CsvField` defines how the JSON file should be converted. `CsvField` represents CSV column and contains:
-- **name** - name of related column in output CSV
-- **source JSON path** - path to related JSON property, that should be converted to this field (see supported JSON paths below)
-- **flag required** - If required is true, but value doesn't exist, then the whole row will be skipped
+A list of `CsvField` defines how the JSON file should be converted. `CsvField` represents a CSV column and contains:
+- **name** - the column name in the output CSV,
+- **source JSON path** - the path to the related JSON property that should be converted to this field (see supported JSON paths below)
+- **flag required** - if set to `true` and the value doesn't exist (is not present), then the whole row will be skipped.
 
 ### Supported JSON paths
-These types of JSON paths are now supported:
+These types of JSON paths are currently supported:
 
 #### Simple paths
 
-- simple plane fields - `"name"`, `"version"`
-- nested fields -  `"options.advanced"`, `"some.nested.property"`
+- plain fields - `"name"`, `"version"`
+- nested object fields -  `"options.advanced"`, `"some.nested.property"`
 
 #### Paths containing arrays   
-These paths contains arrays marked by array identifier `[*]`. Let's call them "array paths".
+These paths contain arrays marked with the array identifier `[*]` - "array paths".
 
-- plane value array item - `"phones[*]"`
+- arrays of plain values - `"phones[*]"`
   - used for arrays of strings, numbers etc.
-- field of array item - `"organizations[*].name"`, `"organizations[*].id"`
-- plane value or field of nested array's item (item of array, which is a field of items of another array) -
-  `"users[*].phones[*]"`, `"organizations[*].users[*].name"`
+- object fields inside of arrays - `"organizations[*].name"`, `"organizations[*].id"`
+- nested arrays, object fields inside of nested arrays - `"users[*].phones[*]"`, `"organizations[*].users[*].name"`
 
-In this case more CSV rows will be generated. For example for path `"organizations[*].users[*].name"` and JSON
+In these cases, more CSV rows will be generated. For example, the path `"organizations[*].users[*].name"` and JSON
 
 ```json
 {
@@ -44,36 +43,33 @@ In this case more CSV rows will be generated. For example for path `"organizatio
 }
 ```
 
-will be genereated 6 rows (2 + 1 + 3 users). So the number of rows equals to the number of _the deepest_ items defined by path,
-`"users"` in this case. Plane fields defined by simple paths will have the same values for each of these rows.
+will result in 6 rows (2 + 1 + 3 users). Therefore, the number of output rows is equal to the number of nested items defined by the path,
+`"users"` in this case. Plain fields defined by simple paths will have the same values for each of these rows (they are duplicated).
 
-Number of generated rows doesn't depends on whether array is root object field or field of some nested object,
-so:
-- `"user.phones[*]"` similar to `"phones[*]"`
-- `"organizations[*].name"` similar to `"some.nested.object.organizations[*].name"`
-- `"organizations[*].users[*].name"` similar to `"data.organizations[*].users[*].name"` etc.
+The number of generated rows doesn't depend on whether the array is a root object field or a field of some nested object, so:
+- `"user.phones[*]"` is identical to `"phones[*]"`
+- `"organizations[*].name"` is identical to `"some.nested.object.organizations[*].name"`
+- `"organizations[*].users[*].name"` is identical to `"data.organizations[*].users[*].name"` etc.
 
 ### Combining paths
-List of `CsvField` can contain different combinations of simple and array paths.
+The list of `CsvField` can contain different combinations of both simple and array paths.
  
 #### Only simple paths
-Always generate only 1 row.
+Simple paths always generate only 1 row per item.
+
 #### Only one "array path"
-Only one "array path" and other simple paths (or no other paths). 
-Number of rows equals to number of rows for that "array path" (number of _the deepest_ items).
+In case there's only one "array path" and the rest are simple paths (or no other paths), the number of rows is equal to the number of items for the given "array path" (the number of the nested items).
 
 #### Hierarchical combination of "array paths"
-Hierarchical combination of "array paths" and other simple paths (or no other paths).
+In this case, a hierarchical combination of "array paths" and other simple paths (or no other paths) is used - for example `["organizations[*].name", "organizations[*].users[*].name", "organizations[*].users[*].emails[*].address"]`.
+The number of rows is equal to the number of items in the most nested path - so in this case, it would be the last path (and it would produce one row for each of the most nested items - `emails`, in this example).
 
-As `["organizations[*].name", "organizations[*].users[*].name", "organizations[*].users[*].emails[*].address"]`.
-Number of rows is equals to the number of _the deepest_ path, so the last path in this case (which prooduce one row for each of _the deepest_ items, so `emails` in this case).
+The values produced by other paths will be duplicated for deeper paths, for example, if the first `organization` object contains 3 `users`, each having 1 `email`, then `organization.name` will be duplicated 3 times for each of these `users` rows (see example below).
 
-Values produced by other paths will be duplicated for deeper paths, for example if first `organization` contains 3 `users`, each has 1`email`, then `organization.name` will be duplicated
-3 times for each of this "users" rows (see example below).
 #### Non-hierarchical combination of "array paths" (NOT YET SUPPORTED)
 Non-hierarchical combination of "array paths" and other simple paths (or no other paths).
 
-**Note that** now `JsonToCsvConverter` doesn't support this case. For example combination of paths `"emails[*].address"` and `"phones[*]"` for JSON
+**Please note:** the current version of `JsonToCsvConverter` doesn't support this case yet. For example, combination of paths `"emails[*].address"` and `"phones[*]"` for JSON
 
 ```json
 {
@@ -87,10 +83,12 @@ Non-hierarchical combination of "array paths" and other simple paths (or no othe
 ```
 can't be converted. 
 
-If you need to convert such JSON, **we recommend** to "split" non-hierarchical combination to multiple hierarchical combinations and somehow process (join) that CSVs after conversion.
-So in this case separately convert `"emails[*].address"` and `"phones[*]"` to CSV, then join result CSVs as you will need.
-### Example
-Code:
+If you need to convert such JSON, we recommend to "split" the non-hierarchical combination into multiple hierarchical combinations and process (join) the CSVs after conversion. So in this case, separately convert `"emails[*].address"` and `"phones[*]"` to CSVs and then join the result CSVs as you need.
+
+## Example
+
+### Code
+
 ```java
 import cz.inventi.JsonToCsvConverter;
 import cz.inventi.model.CsvDefinition;
@@ -115,7 +113,8 @@ public class Example {
 }
 ```
 
-Input JSON:
+### Input JSON
+
 ```json
 {
   "name": "Field name",
@@ -167,7 +166,9 @@ Input JSON:
   ]
 }
 ```
-Output CSV:
+
+### Result (CSV output)
+
 ```csv
 NAME;VERSION;DATE;ORG ID;ORG NAME;USER ID;USER NAME
 Field name;1.0.0;2021-07-05;42e2190f-7fb5-4b19-97e5-8f6c90276167;First test organization;a1535974-5946-4d07-80da-1a55925bf912;First test user
