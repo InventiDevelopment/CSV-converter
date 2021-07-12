@@ -1,4 +1,4 @@
-package cz.inventi.model;
+package cz.inventi.jsontocsvconverter.model;
 
 /**
  * Definition of one field of target file.

@@ -1,4 +1,4 @@
-package cz.inventi;
+package cz.inventi.jsontocsvconverter;
 
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -6,11 +6,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import cz.inventi.model.CsvCell;
-import cz.inventi.model.CsvDefinition;
-import cz.inventi.model.Field;
-import cz.inventi.model.JsonPath;
-import cz.inventi.model.JsonPathType;
+import cz.inventi.jsontocsvconverter.model.CsvCell;
+import cz.inventi.jsontocsvconverter.model.CsvDefinition;
+import cz.inventi.jsontocsvconverter.model.JsonPathType;
+import cz.inventi.jsontocsvconverter.utils.FileUtils;
+import cz.inventi.jsontocsvconverter.utils.JsonUtils;
+import cz.inventi.jsontocsvconverter.utils.ListUtils;
+import cz.inventi.jsontocsvconverter.model.Field;
+import cz.inventi.jsontocsvconverter.model.JsonPath;
 
 import org.apache.commons.lang3.StringUtils;
 import com.jayway.jsonpath.DocumentContext;
@@ -18,23 +21,18 @@ import com.jayway.jsonpath.PathNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
-import static cz.inventi.model.JsonPath.ARRAY_IDENTIFIER_WITH_BRACKETS;
-import static cz.inventi.model.JsonPath.ESCAPED_ARRAY_IDENTIFIER;
-import static cz.inventi.model.JsonPath.countNestedArrays;
-import static cz.inventi.model.JsonPath.findJsonPathIndexes;
-import static cz.inventi.model.JsonPath.getParentJsonPathString;
-import static cz.inventi.utils.CsvUtils.createCsvFile;
-import static cz.inventi.utils.CsvUtils.writeCsvRow;
-import static cz.inventi.utils.FileUtils.ensureTargetDirectoryExists;
-import static cz.inventi.utils.JsonUtils.getArraySize;
-import static cz.inventi.utils.JsonUtils.parseJsonFile;
-import static cz.inventi.utils.ListUtils.extendedList;
+import static cz.inventi.jsontocsvconverter.model.JsonPath.ARRAY_IDENTIFIER_WITH_BRACKETS;
+import static cz.inventi.jsontocsvconverter.model.JsonPath.ESCAPED_ARRAY_IDENTIFIER;
+import static cz.inventi.jsontocsvconverter.model.JsonPath.countNestedArrays;
+import static cz.inventi.jsontocsvconverter.model.JsonPath.findJsonPathIndexes;
+import static cz.inventi.jsontocsvconverter.model.JsonPath.getParentJsonPathString;
+import static cz.inventi.jsontocsvconverter.utils.CsvUtils.createCsvFile;
+import static cz.inventi.jsontocsvconverter.utils.CsvUtils.writeCsvRow;
 
 /**
  * Converts JSON file to CSV based on provided {@link CsvDefinition}.
  */
 @RequiredArgsConstructor
-@SuppressWarnings({"PMD_PATH_TRAVERSAL_OUT"})
 @Log4j2
 public class JsonToCsvConverter {
 
@@ -46,9 +44,9 @@ public class JsonToCsvConverter {
    * @throws IOException when some I/O problem occurred
    */
   public void convert(String source, CsvDefinition csvDefinition) throws IOException {
-    DocumentContext jsonContext = parseJsonFile(source);
+    DocumentContext jsonContext = JsonUtils.parseJsonFile(source);
     String targetDirectory = Paths.get(csvDefinition.getFileName()).getParent().toString();
-    ensureTargetDirectoryExists(targetDirectory);
+    FileUtils.ensureTargetDirectoryExists(targetDirectory);
     convertJsonToCsv(jsonContext, csvDefinition);
   }
 
@@ -132,7 +130,7 @@ public class JsonToCsvConverter {
     } else {
       log.trace("jsonPath {} contains array, check how many items the array contains", modifiedJsonPath);
       String modifiedArrayPathString = StringUtils.substringBefore(modifiedJsonPath, ARRAY_IDENTIFIER_WITH_BRACKETS);
-      int arraySize = getArraySize(modifiedArrayPathString, context);
+      int arraySize = JsonUtils.getArraySize(modifiedArrayPathString, context);
 
       if (nestedArraysNumber == 1) {
         log.trace("JSON path {} contains exactly one array -> add array indexes for the JSON path.",
@@ -204,7 +202,7 @@ public class JsonToCsvConverter {
       for (int i = 0; i < arraySize; i++) {
         log.trace("Duplicating list the original collection is not modified and left intact.");
 
-        List<Integer> newIndexes = extendedList(indexes, i);
+        List<Integer> newIndexes = ListUtils.extendedList(indexes, i);
         List<CsvCell> newRow = new ArrayList<>(row);
 
         for (JsonPath childPath : path.getChildren()) {

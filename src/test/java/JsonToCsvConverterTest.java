@@ -18,11 +18,11 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
-import cz.inventi.JsonToCsvConverter;
-import cz.inventi.model.CsvField;
-import cz.inventi.model.DefaultCsvDefinition;
-import cz.inventi.model.Field;
-import cz.inventi.model.CsvDefinition;
+import cz.inventi.jsontocsvconverter.JsonToCsvConverter;
+import cz.inventi.jsontocsvconverter.model.CsvField;
+import cz.inventi.jsontocsvconverter.model.DefaultCsvDefinition;
+import cz.inventi.jsontocsvconverter.model.Field;
+import cz.inventi.jsontocsvconverter.model.CsvDefinition;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS) // needed for using @AfterAll
 @Log4j2

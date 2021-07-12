@@ -90,23 +90,23 @@ If you need to convert such JSON, we recommend to "split" the non-hierarchical c
 ### Code
 
 ```java
-import cz.inventi.JsonToCsvConverter;
-import cz.inventi.model.CsvDefinition;
-import cz.inventi.model.DefaultCsvDefinition;
-import cz.inventi.model.CsvField;
+import JsonToCsvConverter;
+import CsvDefinition;
+import DefaultCsvDefinition;
+import CsvField;
 
 public class Example {
 
   public static void main(String[] args) {
     JsonToCsvConverter converter = new JsonToCsvConverter();
     CsvDefinition csvDefinition = new DefaultCsvDefinition("Example", "my/output/file.csv", List.of(
-            new CsvField("NAME", "name", false),
-            new CsvField("VERSION", "version", false),
-            new CsvField("DATE", "date", false),
-            new CsvField("ORG ID", "organizations[*].id", false),
-            new CsvField("ORG NAME", "organizations[*].name", false),
-            new CsvField("USER ID", "organizations[*].users[*].id", false),
-            new CsvField("USER NAME", "organizations[*].users[*].name", false)
+        new CsvField("NAME", "name", false),
+        new CsvField("VERSION", "version", false),
+        new CsvField("DATE", "date", false),
+        new CsvField("ORG ID", "organizations[*].id", false),
+        new CsvField("ORG NAME", "organizations[*].name", false),
+        new CsvField("USER ID", "organizations[*].users[*].id", false),
+        new CsvField("USER NAME", "organizations[*].users[*].name", false)
     ));
     converter.convert("my/source/file.json", csvDefinition);
   }

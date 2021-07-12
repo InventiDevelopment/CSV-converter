@@ -1,4 +1,4 @@
-package cz.inventi.model;
+package cz.inventi.jsontocsvconverter.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Value;

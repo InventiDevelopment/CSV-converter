@@ -1,7 +1,7 @@
-package cz.inventi.utils;
+package cz.inventi.jsontocsvconverter.utils;
 
-import cz.inventi.model.Field;
-import cz.inventi.model.CsvDefinition;
+import cz.inventi.jsontocsvconverter.model.CsvDefinition;
+import cz.inventi.jsontocsvconverter.model.Field;
 import lombok.extern.log4j.Log4j2;
 import org.supercsv.io.CsvListWriter;
 import org.supercsv.io.ICsvListWriter;
