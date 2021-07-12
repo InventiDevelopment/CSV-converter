@@ -1,4 +1,4 @@
-package cz.inventi.model;
+package cz.inventi.jsontocsvconverter.model;
 
 import java.util.List;
 
@@ -7,7 +7,7 @@ import lombok.Builder;
 import lombok.Value;
 import org.apache.commons.lang3.StringUtils;
 
-import static cz.inventi.model.JsonPath.ESCAPED_ARRAY_IDENTIFIER;
+import static cz.inventi.jsontocsvconverter.model.JsonPath.ESCAPED_ARRAY_IDENTIFIER;
 
 /**
  * Defines where needed JSON property value (will be written to this CSV cell) should be searched (by path).

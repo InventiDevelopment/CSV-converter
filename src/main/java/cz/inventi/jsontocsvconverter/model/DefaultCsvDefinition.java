@@ -1,4 +1,4 @@
-package cz.inventi.model;
+package cz.inventi.jsontocsvconverter.model;
 
 import java.util.Collection;
 import java.util.Map;

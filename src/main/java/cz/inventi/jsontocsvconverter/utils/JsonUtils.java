@@ -1,4 +1,4 @@
-package cz.inventi.utils;
+package cz.inventi.jsontocsvconverter.utils;
 
 import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.DocumentContext;
@@ -6,8 +6,6 @@ import com.jayway.jsonpath.PathNotFoundException;
 import lombok.extern.log4j.Log4j2;
 
 import java.io.IOException;
-
-import static cz.inventi.utils.FileUtils.readFile;
 
 /**
  * Contains util methods useful for work with JSON files.
@@ -23,7 +21,7 @@ public class JsonUtils {
    * @throws IOException when file can't be read
    */
   public static DocumentContext parseJsonFile(String filename) throws IOException {
-    return com.jayway.jsonpath.JsonPath.using(Configuration.defaultConfiguration()).parse(readFile(filename));
+    return com.jayway.jsonpath.JsonPath.using(Configuration.defaultConfiguration()).parse(FileUtils.readFile(filename));
   }
 
   /**

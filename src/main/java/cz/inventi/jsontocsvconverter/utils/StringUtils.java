@@ -1,4 +1,4 @@
-package cz.inventi.utils;
+package cz.inventi.jsontocsvconverter.utils;
 
 import java.util.List;
 import java.util.regex.Pattern;

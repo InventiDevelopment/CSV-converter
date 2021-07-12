@@ -1,4 +1,4 @@
-package cz.inventi.model;
+package cz.inventi.jsontocsvconverter.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,8 +11,6 @@ import lombok.Builder;
 import lombok.Value;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
-
-import static cz.inventi.utils.StringUtils.findAllValuesByRegex;
 
 /**
  * JSON path, node of JSON paths tree.
@@ -144,7 +142,8 @@ public class JsonPath {
    * @return list of array indexes
    */
   public static List<Integer> findJsonPathIndexes(String jsonPath) {
-    List<String> valuesString = findAllValuesByRegex(jsonPath, NUMBER_ARRAY_IDENTIFIER_WITH_BRACKETS_REGEX);
+    List<String> valuesString = cz.inventi.jsontocsvconverter.utils.StringUtils
+        .findAllValuesByRegex(jsonPath, NUMBER_ARRAY_IDENTIFIER_WITH_BRACKETS_REGEX);
     return valuesString.stream().map(Integer::parseInt).collect(Collectors.toList());
   }
 
