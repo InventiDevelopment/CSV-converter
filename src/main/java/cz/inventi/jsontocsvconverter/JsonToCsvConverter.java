@@ -1,33 +1,30 @@
 package cz.inventi.jsontocsvconverter;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
+import com.jayway.jsonpath.DocumentContext;
+import com.jayway.jsonpath.PathNotFoundException;
+
 import cz.inventi.jsontocsvconverter.model.CsvCell;
 import cz.inventi.jsontocsvconverter.model.CsvDefinition;
+import cz.inventi.jsontocsvconverter.model.Field;
+import cz.inventi.jsontocsvconverter.model.JsonPath;
 import cz.inventi.jsontocsvconverter.model.JsonPathType;
+import cz.inventi.jsontocsvconverter.model.csvdefinitions.FileCsvDefinition;
+import cz.inventi.jsontocsvconverter.utils.CsvUtils;
 import cz.inventi.jsontocsvconverter.utils.FileUtils;
 import cz.inventi.jsontocsvconverter.utils.JsonUtils;
 import cz.inventi.jsontocsvconverter.utils.ListUtils;
-import cz.inventi.jsontocsvconverter.model.Field;
-import cz.inventi.jsontocsvconverter.model.JsonPath;
-
-import org.apache.commons.lang3.StringUtils;
-import com.jayway.jsonpath.DocumentContext;
-import com.jayway.jsonpath.PathNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-
-import static cz.inventi.jsontocsvconverter.model.JsonPath.ARRAY_IDENTIFIER_WITH_BRACKETS;
-import static cz.inventi.jsontocsvconverter.model.JsonPath.ESCAPED_ARRAY_IDENTIFIER;
-import static cz.inventi.jsontocsvconverter.model.JsonPath.countNestedArrays;
-import static cz.inventi.jsontocsvconverter.model.JsonPath.findJsonPathIndexes;
-import static cz.inventi.jsontocsvconverter.model.JsonPath.getParentJsonPathString;
-import static cz.inventi.jsontocsvconverter.utils.CsvUtils.createCsvFile;
-import static cz.inventi.jsontocsvconverter.utils.CsvUtils.writeCsvRow;
 
 /**
  * Converts JSON file to CSV based on provided {@link CsvDefinition}.
@@ -45,8 +42,38 @@ public class JsonToCsvConverter {
    */
   public void convert(String source, CsvDefinition csvDefinition) throws IOException {
     DocumentContext jsonContext = JsonUtils.parseJsonFile(source);
-    String targetDirectory = Paths.get(csvDefinition.getFileName()).getParent().toString();
-    FileUtils.ensureTargetDirectoryExists(targetDirectory);
+    convert(jsonContext, csvDefinition);
+  }
+
+  /**
+   * Convert source JSON file to new created CSV target file.
+   *
+   * @param source        source JSON file
+   * @param csvDefinition definition of target CSV format
+   * @throws IOException when some I/O problem occurred
+   */
+  public void convert(File source, CsvDefinition csvDefinition) throws IOException {
+    DocumentContext jsonContext = JsonUtils.parseJsonFile(source);
+    convert(jsonContext, csvDefinition);
+  }
+
+  /**
+   * Convert source JSON file to new created CSV target file.
+   *
+   * @param source        source JSON file
+   * @param csvDefinition definition of target CSV format
+   * @throws IOException when some I/O problem occurred
+   */
+  public void convert(InputStream source, CsvDefinition csvDefinition) throws IOException {
+    DocumentContext jsonContext = JsonUtils.parseJsonFile(source);
+    convert(jsonContext, csvDefinition);
+  }
+
+  private void convert(DocumentContext jsonContext, CsvDefinition csvDefinition) throws IOException {
+    if (csvDefinition instanceof FileCsvDefinition) {
+      String targetDirectory = Paths.get(((FileCsvDefinition) csvDefinition).getFileName()).getParent().toString();
+      FileUtils.ensureTargetDirectoryExists(targetDirectory);
+    }
     convertJsonToCsv(jsonContext, csvDefinition);
   }
 
@@ -59,18 +86,18 @@ public class JsonToCsvConverter {
    */
   private void convertJsonToCsv(DocumentContext jsonContext, CsvDefinition csvDefinition)
           throws IOException {
-    log.debug("Converting JSON file to CSV file {} ({}).", csvDefinition.getName(), csvDefinition.getFileName());
+    log.debug("Converting JSON file to CSV file {}.", csvDefinition.getName());
     JsonPath root = getJsonPathsTree(jsonContext, csvDefinition);
 
-    log.debug("Generating CSV file {} ({}).", csvDefinition.getName(), csvDefinition.getFileName());
-    createCsvFile(csvDefinition);
+    log.debug("Generating CSV file {}.", csvDefinition.getName());
+    CsvUtils.createCsvFile(csvDefinition);
 
-    log.trace("Start generating CSV file {} ({}) rows.", csvDefinition.getName(), csvDefinition.getFileName());
+    log.trace("Start generating CSV file {} rows.", csvDefinition.getName());
     List<CsvCell> row = new ArrayList<>();
     for (JsonPath path : root.getChildren()) {
       generateRow(csvDefinition, path, row, new ArrayList<>(), jsonContext);
     }
-    log.info("CSV file {} ({}) was successfully created.", csvDefinition.getName(), csvDefinition.getFileName());
+    log.info("CSV file {} was successfully created.", csvDefinition.getName());
   }
 
   /**
@@ -123,13 +150,13 @@ public class JsonToCsvConverter {
    */
   private void parseJsonPathField(final String originalJsonPath, String modifiedJsonPath, JsonPath root,
                                   DocumentContext context) {
-    int nestedArraysNumber = countNestedArrays(modifiedJsonPath);
+    int nestedArraysNumber = JsonPath.countNestedArrays(modifiedJsonPath);
 
     if (nestedArraysNumber == 0) {
       root.addNewDescendantJsonPath(originalJsonPath, JsonPathType.PROPERTY);
     } else {
       log.trace("jsonPath {} contains array, check how many items the array contains", modifiedJsonPath);
-      String modifiedArrayPathString = StringUtils.substringBefore(modifiedJsonPath, ARRAY_IDENTIFIER_WITH_BRACKETS);
+      String modifiedArrayPathString = StringUtils.substringBefore(modifiedJsonPath, JsonPath.ARRAY_IDENTIFIER_WITH_BRACKETS);
       int arraySize = JsonUtils.getArraySize(modifiedArrayPathString, context);
 
       if (nestedArraysNumber == 1) {
@@ -137,8 +164,8 @@ public class JsonToCsvConverter {
                 modifiedJsonPath);
 
         // if parent path already exists in tree, then returns existing
-        JsonPath parentPath = root.addNewDescendantJsonPath(getParentJsonPathString(originalJsonPath), JsonPathType.ARRAY);
-        parentPath.getArrayIndexes().put(findJsonPathIndexes(modifiedJsonPath), arraySize);
+        JsonPath parentPath = root.addNewDescendantJsonPath(JsonPath.getParentJsonPathString(originalJsonPath), JsonPathType.ARRAY);
+        parentPath.getArrayIndexes().put(JsonPath.findJsonPathIndexes(modifiedJsonPath), arraySize);
       }
 
       // Iterate array
@@ -149,7 +176,7 @@ public class JsonToCsvConverter {
       }
       for (int i = 0; i < arraySize; i++) {
         log.trace("Call recursive method for each items from the array to get value with replaced array index.");
-        String iterateJsonPath = modifiedJsonPath.replaceFirst(ESCAPED_ARRAY_IDENTIFIER, i + "");
+        String iterateJsonPath = modifiedJsonPath.replaceFirst(JsonPath.ESCAPED_ARRAY_IDENTIFIER, i + "");
         parseJsonPathField(originalJsonPath, iterateJsonPath, root, context);
       }
     }
@@ -186,7 +213,7 @@ public class JsonToCsvConverter {
       log.trace("Create cell with JSON path {} and array indexes {}.", path.getPath(), indexes);
 
       Field currentField = csvDefinition.getFieldByJsonPath(path.getPath());
-      row.add(new CsvCell(path.getPath(), indexes, currentField.isRequired()));
+      row.add(new CsvCell(path.getPath(), indexes, currentField));
 
       if (row.size() == csvDefinition.getFields().size()) {
         writeFoundRow(row, csvDefinition, jsonContext);
@@ -225,7 +252,7 @@ public class JsonToCsvConverter {
     log.trace("CSV row ({}) is complete -> generate CSV row with real values from JSON file.",
             csvDefinition.getName());
     List<String> values = obtainRowValuesFromJson(row, jsonContext);
-    writeCsvRow(csvDefinition, values);
+    CsvUtils.writeCsvRow(csvDefinition, values);
   }
 
   /**
@@ -246,14 +273,22 @@ public class JsonToCsvConverter {
       String jsonPathWithFilledIndexes = cell.getJsonPathWithFilledIndexes();
 
       String propertyValue = getPropertyValue(jsonPathWithFilledIndexes, context);
-      if (propertyValue == null) {
-        if (cell.isRequired()) {
+      List<String> convertedValues = null;
+      if (cell.getCurrentField().getConverter() != null) {
+        convertedValues = cell.getCurrentField().getConverter().apply(cell.getCurrentField(), propertyValue);
+      }
+      if (propertyValue == null && (convertedValues == null || convertedValues.size() == 0)) {
+        if (cell.getCurrentField().isRequired()) {
           log.debug("For the property '{}' doesn't exist any value, skip the whole line.", jsonPathWithFilledIndexes);
           return Collections.emptyList();
         }
         propertyValue = StringUtils.EMPTY;
       }
-      values.add(propertyValue);
+      if (convertedValues != null && convertedValues.size() > 0) {
+        values.addAll(convertedValues);
+      } else {
+        values.add(propertyValue);
+      }
     }
 
     return values;

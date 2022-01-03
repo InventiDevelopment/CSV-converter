@@ -2,6 +2,7 @@ package cz.inventi.jsontocsvconverter.model;
 
 import java.util.List;
 
+import cz.inventi.jsontocsvconverter.model.csvdefinitions.DefaultCsvDefinition;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
@@ -24,10 +25,11 @@ public class CsvCell {
    * Real indexes for {@link JsonPath#ARRAY_IDENTIFIER}s in jsonPath
    */
   List<Integer> indexes;
+
   /**
-   * If value is required. If required is true, but value doesn't exist, then the whole row will be skipped
+   * Definition of CSV field.
    */
-  boolean required;
+  Field currentField;
 
   /**
    * @return true if jsonPath is equal to special constant EMPTY_JSON_PATH, otherwise false

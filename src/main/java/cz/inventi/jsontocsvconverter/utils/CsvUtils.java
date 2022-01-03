@@ -2,6 +2,8 @@ package cz.inventi.jsontocsvconverter.utils;
 
 import cz.inventi.jsontocsvconverter.model.CsvDefinition;
 import cz.inventi.jsontocsvconverter.model.Field;
+import cz.inventi.jsontocsvconverter.model.csvdefinitions.FileCsvDefinition;
+import cz.inventi.jsontocsvconverter.model.csvdefinitions.OutputStreamCsvDefinition;
 import lombok.extern.log4j.Log4j2;
 import org.supercsv.io.CsvListWriter;
 import org.supercsv.io.ICsvListWriter;
@@ -9,6 +11,8 @@ import org.supercsv.prefs.CsvPreference;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.nio.charset.Charset;
 import java.util.List;
 
@@ -29,7 +33,7 @@ public class CsvUtils {
       String[] header = csvDefinition.getFields().stream().map(Field::getName).toArray(String[]::new);
       writer.writeHeader(header);
     }
-    log.trace("CSV file {} was created (now only with header)", csvDefinition.getFileName());
+    log.trace("CSV file {} was created (now only with header)", csvDefinition.getName());
   }
 
   /**
@@ -59,9 +63,17 @@ public class CsvUtils {
     char delimiterChar = csvDefinition.getColumnDelimiter().charAt(0);
     String recordDelimiter = csvDefinition.getRecordDelimiter();
 
+    Writer writer = null;
+    if (csvDefinition instanceof OutputStreamCsvDefinition) {
+      writer = new OutputStreamWriter(((OutputStreamCsvDefinition) csvDefinition).getOutputStream(),
+          Charset.forName(csvDefinition.getEncoding()));
+    } else if (csvDefinition instanceof FileCsvDefinition) {
+      writer = new FileWriter(((FileCsvDefinition) csvDefinition).getFileName(),
+          Charset.forName(csvDefinition.getEncoding()), true);
+    }
     return new CsvListWriter(
-            new FileWriter(csvDefinition.getFileName(), Charset.forName(csvDefinition.getEncoding()), true),
-            new CsvPreference.Builder(encapsulationChar, delimiterChar, recordDelimiter).build()
+        writer,
+        new CsvPreference.Builder(encapsulationChar, delimiterChar, recordDelimiter).build()
     );
   }
 }
