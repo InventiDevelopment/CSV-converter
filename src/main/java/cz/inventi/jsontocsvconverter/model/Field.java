@@ -25,6 +25,6 @@ public interface Field {
   /**
    * @return Value from the JSON is changed to different value based on converter.
    */
-  BiFunction<Field, String, List<String>> getConverter();
+  BiFunction<Field, String, List<String>> getCustomMapper();
 
 }

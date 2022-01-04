@@ -1,23 +1,8 @@
 package cz.inventi.jsontocsvconverter;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import org.apache.commons.lang3.StringUtils;
-
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.PathNotFoundException;
-
-import cz.inventi.jsontocsvconverter.model.CsvCell;
-import cz.inventi.jsontocsvconverter.model.CsvDefinition;
-import cz.inventi.jsontocsvconverter.model.Field;
-import cz.inventi.jsontocsvconverter.model.JsonPath;
-import cz.inventi.jsontocsvconverter.model.JsonPathType;
+import cz.inventi.jsontocsvconverter.model.*;
 import cz.inventi.jsontocsvconverter.model.csvdefinitions.FileCsvDefinition;
 import cz.inventi.jsontocsvconverter.utils.CsvUtils;
 import cz.inventi.jsontocsvconverter.utils.FileUtils;
@@ -25,6 +10,15 @@ import cz.inventi.jsontocsvconverter.utils.JsonUtils;
 import cz.inventi.jsontocsvconverter.utils.ListUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.lang3.StringUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Converts JSON file to CSV based on provided {@link CsvDefinition}.
@@ -274,8 +268,8 @@ public class JsonToCsvConverter {
 
       String propertyValue = getPropertyValue(jsonPathWithFilledIndexes, context);
       List<String> convertedValues = null;
-      if (cell.getCurrentField().getConverter() != null) {
-        convertedValues = cell.getCurrentField().getConverter().apply(cell.getCurrentField(), propertyValue);
+      if (cell.getCurrentField().getCustomMapper() != null) {
+        convertedValues = cell.getCurrentField().getCustomMapper().apply(cell.getCurrentField(), propertyValue);
       }
       if (propertyValue == null && (convertedValues == null || convertedValues.size() == 0)) {
         if (cell.getCurrentField().isRequired()) {
