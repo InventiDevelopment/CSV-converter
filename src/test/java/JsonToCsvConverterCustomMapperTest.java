@@ -48,8 +48,9 @@ public class JsonToCsvConverterCustomMapperTest {
         convertJsonToCsv(inputJsonFilename, csvDefinition);
 
         List<List<String>> output = ConverterTestUtil.outputStreamToListOfLists(csvDefinition.getOutputStream(), csvDefinition.getColumnDelimiter());
-        assertEquals(1, output.get(0).size()); // header
+        assertEquals(2, output.get(0).size()); // header
         assertEquals(2, output.get(1).size());
+        assertEquals(output.get(1).get(0), output.get(1).get(1));
     }
 
     private void convertJsonToCsv(String source, OutputStreamCsvDefinition csvDefinition) throws IOException {
