@@ -17,7 +17,7 @@ A list of `CsvField` defines how the JSON file should be converted. `CsvField` r
 - **name** - the column name in the output CSV,
 - **source JSON path** - the path to the related JSON property that should be converted to this field (see supported JSON paths below)
 - **flag required** - if set to `true` and the value doesn't exist (is not present), then the whole row will be skipped.
-- **customMapper** - Java BiFunction<Field, String, List<String>> parameter, You can easily define custom mapping via lambda. If not set, field is mapped 1 to 1.
+- **customMapper** - Java `BiFunction<Field, String, List<String>>` parameter, You can easily define custom mapping via lambda. If not set, field is mapped 1 to 1.
 
 ### Supported JSON paths
 These types of JSON paths are currently supported:
