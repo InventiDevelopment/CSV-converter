@@ -21,6 +21,17 @@ public class FileUtils {
   }
 
   /**
+   * Reads file with filename.
+   *
+   * @param file file
+   * @return string content of file
+   * @throws IOException when file cannot be read
+   */
+  public static String readFile(File file) throws IOException {
+    return org.apache.commons.io.FileUtils.readFileToString(file, StandardCharsets.UTF_8);
+  }
+
+  /**
    * Checks if target directory exists. If not, creates it.
    *
    * @param target path to target directory

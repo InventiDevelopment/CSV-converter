@@ -1,5 +1,8 @@
 package cz.inventi.jsontocsvconverter.model;
 
+import java.util.List;
+import java.util.function.BiFunction;
+
 /**
  * Definition of one field of target file.
  */
@@ -18,5 +21,10 @@ public interface Field {
    * @return If value is required. If required is true, but value doesn't exist, then the whole row will be skipped
    */
   boolean isRequired();
+
+  /**
+   * @return Value from the JSON is changed to different value based on converter.
+   */
+  BiFunction<Field, String, List<String>> getCustomMapper();
 
 }

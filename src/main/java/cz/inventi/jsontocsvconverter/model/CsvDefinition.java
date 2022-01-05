@@ -12,11 +12,6 @@ public interface CsvDefinition {
   String getName();
 
   /**
-   * @return target CSV filename
-   */
-  String getFileName();
-
-  /**
    * @return CSV file encoding
    */
   default String getEncoding() {

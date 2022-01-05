@@ -1,15 +1,8 @@
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertIterableEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
+import cz.inventi.jsontocsvconverter.JsonToCsvConverter;
+import cz.inventi.jsontocsvconverter.model.CsvDefinition;
+import cz.inventi.jsontocsvconverter.model.CsvField;
+import cz.inventi.jsontocsvconverter.model.Field;
+import cz.inventi.jsontocsvconverter.model.csvdefinitions.FileCsvDefinition;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterAll;
@@ -18,15 +11,20 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
-import cz.inventi.jsontocsvconverter.JsonToCsvConverter;
-import cz.inventi.jsontocsvconverter.model.CsvField;
-import cz.inventi.jsontocsvconverter.model.DefaultCsvDefinition;
-import cz.inventi.jsontocsvconverter.model.Field;
-import cz.inventi.jsontocsvconverter.model.CsvDefinition;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertIterableEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS) // needed for using @AfterAll
 @Log4j2
-public class JsonToCsvConverterTest {
+public class JsonToCsvConverterFileOutputTest {
 
   private static final String TEST_RESOURCES_INPUT_FOLDER = "src/test/resources/input";
   private static final String TEST_RESOURCES_OUTPUT_FOLDER = "src/test/resources/output";
@@ -154,7 +152,8 @@ public class JsonToCsvConverterTest {
   }
 
   @Test
-  @Disabled // TODO this case will be covered later
+  @Disabled
+    // TODO this case will be covered later
   void convertJsonFile__withTwoArraysOnTheSameLevelForMultipleLevels() {
     //Test with more arrays on the same level - for multiple levels:
     //array: [
@@ -196,44 +195,28 @@ public class JsonToCsvConverterTest {
 
   @Test
   void convertJsonFile__complexStructure1__allFieldsAreOptional() throws IOException {
-    runTest("test10-input.json", "test10-output.csv", 4, getComplexStructureTestFields());
+    runTest("test10-input.json", "test10-output.csv", 4, ConverterTestUtil.getComplexStructureTestFields());
   }
 
   @Test
   void convertJsonFile__complexStructure2__allFieldsAreOptional() throws IOException {
-    runTest("test11-input.json", "test11-output.csv", 24, getComplexStructureTestFields());
+    runTest("test11-input.json", "test11-output.csv", 24, ConverterTestUtil.getComplexStructureTestFields());
   }
 
   @Test
   void convertJsonFile__complexStructure3__allFieldsAreOptional() throws IOException {
-    runTest("test12-input.json", "test12-output.csv", 9, getComplexStructureTestFields());
+    runTest("test12-input.json", "test12-output.csv", 9, ConverterTestUtil.getComplexStructureTestFields());
   }
 
   @Test
   void convertJsonFile__complexStructure4__allFieldsAreOptional() throws IOException {
-    runTest("test13-input.json", "test13-output.csv", 10, getComplexStructureTestFields());
-  }
-
-  private List<Field> getComplexStructureTestFields() {
-    return List.of(
-            new CsvField("NAME", "name", false),
-            new CsvField("VERSION", "version", false),
-            new CsvField("DATE", "date", false),
-            new CsvField("OPTION", "options.name", false),
-            new CsvField("TENANT ID", "tenants[*].id", false),
-            new CsvField("TENANT NAME", "tenants[*].name", false),
-            new CsvField("ORGANIZATION ID", "tenants[*].organizations[*].id", false),
-            new CsvField("ORGANIZATION NAME", "tenants[*].organizations[*].name", false),
-            new CsvField("ORGANIZATION CREATED", "tenants[*].organizations[*].created", false),
-            new CsvField("POS ID", "tenants[*].organizations[*].pos[*].id", false),
-            new CsvField("POS TITLE", "tenants[*].organizations[*].pos[*].title", false)
-    );
+    runTest("test13-input.json", "test13-output.csv", 10, ConverterTestUtil.getComplexStructureTestFields());
   }
 
   private void runTest(String inputJsonFilename, String expectedCsvOutputFilename, int expectedNumberOfRowsExcludingHeader, List<Field> fields) throws IOException {
     String actualOutputFilename = Paths.get(TEST_OUTPUT_FOLDER, inputJsonFilename.replace("-input.json", "-convert.csv")).toString();
 
-    CsvDefinition csvDefinition = new DefaultCsvDefinition("Test Convert " + inputJsonFilename, actualOutputFilename, fields);
+    FileCsvDefinition csvDefinition = new FileCsvDefinition("Test Convert " + inputJsonFilename, actualOutputFilename, fields);
 
     List<List<String>> actualCsvOutput = convertJsonToCsv(inputJsonFilename, csvDefinition);
 
@@ -253,31 +236,25 @@ public class JsonToCsvConverterTest {
     assertIterableEquals(expectedCsvOutput, actualCsvOutput);
   }
 
-  private List<List<String>> convertJsonToCsv(String source, CsvDefinition csvDefinition) throws IOException {
+  private List<List<String>> convertJsonToCsv(String source, FileCsvDefinition csvDefinition) throws IOException {
     jsonToCsvConverter.convert(TEST_RESOURCES_INPUT_FOLDER + "/" + source, csvDefinition);
     return readGeneratedFile(csvDefinition);
   }
 
-  private List<List<String>> readGeneratedFile(CsvDefinition csvFile) {
+  private List<List<String>> readGeneratedFile(FileCsvDefinition csvFile) {
     return readCsvFile(csvFile.getFileName(), csvFile.getEncoding(), csvFile.getColumnDelimiter());
   }
 
   private List<List<String>> readCsvFile(String filename, String encoding, String columnDelimiter) {
     // TODO here can be used ICsvListReader from supercsv library
-    List<String> files;
+    List<String> lines;
     try {
-      files = FileUtils.readLines(new File(filename), encoding);
+      lines = FileUtils.readLines(new File(filename), encoding);
     } catch (IOException e) {
       log.error("File '{}' doesn't exist.", filename);
       return null;
     }
 
-    return files.stream().map(file -> {
-      if (String.valueOf(file.charAt(file.length() - 1)).equals(columnDelimiter)) {
-        file += " ";
-      }
-      return Arrays.stream(file.split(columnDelimiter)).map(f -> !f.equals(" ") ? f : "")
-              .collect(Collectors.toList());
-    }).collect(Collectors.toList());
+    return ConverterTestUtil.linesFromFileToListOfLists(lines, columnDelimiter);
   }
 }

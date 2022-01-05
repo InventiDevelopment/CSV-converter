@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import cz.inventi.jsontocsvconverter.model.csvdefinitions.DefaultCsvDefinition;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
