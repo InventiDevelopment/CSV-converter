@@ -12,7 +12,8 @@ public class CustomFieldMappingConverter {
     private static final String INPUT_JSON = "./input.json";
     private static final String OUTPUT_CSV = "./output.csv";
     private static final List<Field> FIELDS = List.of(
-            new CsvField("NAME", "name", false, (field, value) -> Arrays.asList(value, value))
+            new CsvField("NAME", "name", false, (field, value) -> Arrays.asList(value, value)),
+            new CsvField("LASTNAME", DefaultCsvDefinition.EMPTY_JSON_PATH)
     );
 
     private final JsonToCsvConverter jsonToCsvConverter = new JsonToCsvConverter();
@@ -23,6 +24,6 @@ public class CustomFieldMappingConverter {
     }
 
     public static void main(String[] args) throws IOException {
-        new NestedConverter().runConversion(INPUT_JSON, OUTPUT_CSV, FIELDS);
+        new CustomFieldMappingConverter().runConversion(INPUT_JSON, OUTPUT_CSV, FIELDS);
     }
 }

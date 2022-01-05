@@ -11,15 +11,18 @@ import org.junit.jupiter.api.TestInstance;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertIterableEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS) // needed for using @AfterAll
 @Log4j2
-
 public class JsonToCsvConverterStreamOutputTest {
     private static final String TEST_RESOURCES_INPUT_FOLDER = "src/test/resources/input";
     private static final String TEST_RESOURCES_OUTPUT_FOLDER = "src/test/resources/output";
@@ -207,7 +210,9 @@ public class JsonToCsvConverterStreamOutputTest {
 
         OutputStreamCsvDefinition csvDefinition = new OutputStreamCsvDefinition("Test Convert " + inputJsonFilename, testOutputStream, fields);
 
-        convertJsonToCsv(inputJsonFilename, csvDefinition);
+        InputStream inputStream = ConverterTestUtil.inputStreamFromFile(TEST_RESOURCES_INPUT_FOLDER + "/" + inputJsonFilename);
+
+        convertInputStreamJsonToCsv(inputStream, csvDefinition);
 
         List<List<String>> targetOutput = readTargetOutputFromCsv(expectedCsvOutputFilename, csvDefinition.getEncoding(), csvDefinition.getColumnDelimiter());
 
@@ -224,17 +229,17 @@ public class JsonToCsvConverterStreamOutputTest {
 
         List<List<String>> actualOutput = ConverterTestUtil.outputStreamToListOfLists(csvDefinition.getOutputStream(), csvDefinition.getColumnDelimiter());
 
-
         assertIterableEquals(expectedOutput, actualOutput);
     }
 
-    private void convertJsonToCsv(String source, OutputStreamCsvDefinition csvDefinition) throws IOException {
-        jsonToCsvConverter.convert(TEST_RESOURCES_INPUT_FOLDER + "/" + source, csvDefinition);
+    private void convertInputStreamJsonToCsv(InputStream inputStream, OutputStreamCsvDefinition csvDefinition) throws IOException {
+        jsonToCsvConverter.convert(inputStream, csvDefinition);
     }
 
     private List<List<String>> readTargetOutputFromCsv(String filename, String encoding, String columnDelimiter) {
         // TODO here can be used ICsvListReader from supercsv library
         List<String> lines;
+
         try {
             lines = FileUtils.readLines(new File(TEST_RESOURCES_OUTPUT_FOLDER + "/" + filename), encoding);
         } catch (IOException e) {

@@ -1,6 +1,7 @@
 import cz.inventi.jsontocsvconverter.JsonToCsvConverter;
 import cz.inventi.jsontocsvconverter.model.CsvField;
 import cz.inventi.jsontocsvconverter.model.Field;
+import cz.inventi.jsontocsvconverter.model.csvdefinitions.DefaultCsvDefinition;
 import cz.inventi.jsontocsvconverter.model.csvdefinitions.OutputStreamCsvDefinition;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.FileUtils;
@@ -20,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS) // needed for using @AfterAll
 @Log4j2
-public class JsonToCsvConverterCustomConvertTest {
+public class JsonToCsvConverterCustomMapperTest {
 
     private static final String TEST_RESOURCES_INPUT_FOLDER = "src/test/resources/input";
 
@@ -37,7 +38,8 @@ public class JsonToCsvConverterCustomConvertTest {
     void convertJsonFile__doubleNameField() throws IOException {
         var inputJsonFilename = "test14-input.json";
         List<Field> fields =  List.of(
-                new CsvField("NAME", "name", false, (field, value) -> Arrays.asList(value, value))
+                new CsvField("NAME", "name", false, (field, value) -> Arrays.asList(value, value)),
+                new CsvField("LASTNAME", DefaultCsvDefinition.EMPTY_JSON_PATH)
         );
         OutputStream testOutputStream = new ByteArrayOutputStream();
 

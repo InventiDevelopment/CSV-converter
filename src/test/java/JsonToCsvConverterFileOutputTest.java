@@ -5,7 +5,11 @@ import cz.inventi.jsontocsvconverter.model.Field;
 import cz.inventi.jsontocsvconverter.model.csvdefinitions.FileCsvDefinition;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.FileUtils;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,8 +17,10 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertIterableEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS) // needed for using @AfterAll
 @Log4j2
@@ -146,7 +152,8 @@ public class JsonToCsvConverterFileOutputTest {
   }
 
   @Test
-  @Disabled // TODO this case will be covered later
+  @Disabled
+    // TODO this case will be covered later
   void convertJsonFile__withTwoArraysOnTheSameLevelForMultipleLevels() {
     //Test with more arrays on the same level - for multiple levels:
     //array: [

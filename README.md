@@ -9,7 +9,9 @@ This library provides a configurable JSON → CSV converter. The main features a
 
 ## How to use
 `JsonToCsvConverter.convert` receives the source JSON filename and `CsvDefinition`. There are two implementations for `CsvDefinition`: </br>
-`FileCsvDefinition` for CSV file as output and `OutputStreamCsvDefinition` for OutputStream as output.
+- `FileCsvDefinition` for CSV file as an output
+- `OutputStreamCsvDefinition` for OutputStream as an output
+
 
 A list of `CsvField` defines how the JSON file should be converted. `CsvField` represents a CSV column and contains:
 - **name** - the column name in the output CSV,

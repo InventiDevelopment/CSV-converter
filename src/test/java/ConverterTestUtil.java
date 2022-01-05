@@ -1,6 +1,11 @@
 import cz.inventi.jsontocsvconverter.model.CsvField;
 import cz.inventi.jsontocsvconverter.model.Field;
+import org.apache.commons.io.FileUtils;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.List;
@@ -42,5 +47,9 @@ public class ConverterTestUtil {
                 new CsvField("POS ID", "tenants[*].organizations[*].pos[*].id", false, null),
                 new CsvField("POS TITLE", "tenants[*].organizations[*].pos[*].title", false, null)
         );
+    }
+
+    public static InputStream inputStreamFromFile(String source) throws IOException {
+        return new ByteArrayInputStream(FileUtils.readFileToByteArray(new File(source)));
     }
 }
