@@ -60,7 +60,7 @@ public class JsonUtils {
   public static int getArraySize(String arrayPathString, DocumentContext context) {
     try {
       return context.read(String.format("%s.length()", arrayPathString));
-    } catch (PathNotFoundException e) {
+    } catch (PathNotFoundException | NullPointerException e) {
       log.trace("No data was found for JSON path {}.", arrayPathString);
       return 0;
     }
